@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "create": {
+      "description": "Create",
+      "factory": "./collection/create/index#create",
+      "schema": "./collection/create/schema.json"
+    }
+  }
+}

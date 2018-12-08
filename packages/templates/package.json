@@ -1,0 +1,29 @@
+{
+  "name": "@matron/templates",
+  "version": "0.0.0",
+  "description": "Matron Templates",
+  "keywords": [
+    "Typescript",
+    "Javascript",
+    "Webpack",
+    "Jest",
+    "Karma",
+    "Jasmine",
+    "Rollup"
+  ],
+  "author": "Yann Renaudin <renaudin.yann@gmail.com>",
+  "homepage": "",
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  }
+}

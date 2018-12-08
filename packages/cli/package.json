@@ -1,0 +1,43 @@
+{
+  "name": "matron",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Yann Renaudin <renaudin.yann@gmail.com>",
+  "homepage": "",
+  "license": "MIT",
+  "main": "lib/cli.js",
+  "bin": {
+    "cli": "bin/cli"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node ./src/cli.ts",
+    "prod": "npm run build && node ./dist/cli.js",
+    "server": "nodemon ./src/cli.ts",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@matron/schematics": "^0.0.0",
+    "@types/cross-spawn": "^6.0.0",
+    "chalk": "^2.4.1",
+    "commander": "^2.19.0",
+    "cross-spawn": "^6.0.5"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.2",
+    "@types/node": "^10.12.11",
+    "nodemon": "^1.18.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.1"
+  }
+}

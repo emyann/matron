@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "WebpackSchematics",
+  "title": "Create a Typscript project with Webpack",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Project name.",
+      "$default": {
+        "$source": "projectName"
+      }
+    }
+  },
+  "template": {
+    "type": "string",
+    "description": "Project template"
+  },
+  "skipInstall": {
+    "type": "boolean",
+    "description": "Skip npm dependencies installation"
+  },
+  "required": ["name"]
+}
