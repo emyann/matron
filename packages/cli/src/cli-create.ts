@@ -64,6 +64,8 @@ Examples
 program.parse(process.argv);
 
 function create(name: string, options: CreateOptions) {
+  const SCHEMATICS_MODULE = '@matron/schematics';
+
   const { bundler, template, test, type } = options;
   if (typeof name === 'undefined') {
     console.error('Please specify the project directory:');
@@ -80,14 +82,16 @@ function create(name: string, options: CreateOptions) {
     console.warn(
       'You have specified a template along with a bundler, test or type option. Only the template flag will be used'
     );
+    console.log(bundler, test, type);
     const command = 'schematics';
-    const args = [`schematics-test:create`, '--name', name, '--template', template];
+    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', template];
     spawn.sync(command, args, { stdio: 'inherit' });
+    // console.log(template, res);
   } else if (type) {
     // Only Typscript is supported atm
     const templateName = generateTemplateName(options);
     const command = 'schematics';
-    const args = [`schematics-test:create`, '--name', name, '--template', templateName];
+    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', templateName];
 
     spawn.sync(command, args, { stdio: 'inherit' });
   }

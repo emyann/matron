@@ -12,5 +12,6 @@
     "removeComments": true,
     "resolveJsonModule": true
   },
+  "include": ["src/**/*", "./package.json"],
   "exclude": ["node_modules", "dist"]
 }

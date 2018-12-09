@@ -17,15 +17,18 @@
   "publishConfig": {
     "access": "public"
   },
-  "schematics": "./src/collection.json",
+  "schematics": "./dist/collection.json",
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "start": "npm run build -- -w",
+    "build": "tsc -p tsconfig.json & npm run webpack",
+    "webpack": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack",
+    "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "dependencies": {
     "@angular-devkit/core": "^7.1.0",
     "@angular-devkit/schematics": "^7.1.0",
     "@angular-devkit/schematics-cli": "^0.11.0",
-    "@matron/typescript": "^1.0.0",
+    "@matron/typescript": "^1.0.1",
     "@types/jasmine": "^2.6.0",
     "@types/node": "^8.0.31",
     "@types/strip-json-comments": "0.0.30",
@@ -36,6 +39,17 @@
     "typescript": "~3.1.6"
   },
   "devDependencies": {
-    "@types/cross-spawn": "^6.0.0"
+    "@matron/templates": "0.0.0",
+    "@types/copy-webpack-plugin": "^4.4.2",
+    "@types/cross-spawn": "^6.0.0",
+    "@types/node": "^10.12.12",
+    "@types/webpack": "^4.4.20",
+    "copy-webpack-plugin": "^4.6.0",
+    "ts-loader": "^5.3.1",
+    "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.7.0",
+    "typescript": "^3.2.2",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2"
   }
 }

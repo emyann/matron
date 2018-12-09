@@ -27,13 +27,14 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@matron/schematics": "^0.0.0",
+    "@matron/schematics": "0.0.0",
     "@types/cross-spawn": "^6.0.0",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "cross-spawn": "^6.0.5"
   },
   "devDependencies": {
+    "@angular-devkit/schematics-cli": "^0.11.2",
     "@types/commander": "^2.12.2",
     "@types/node": "^10.12.11",
     "nodemon": "^1.18.4",
