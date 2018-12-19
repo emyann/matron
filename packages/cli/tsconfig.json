@@ -10,7 +10,8 @@
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "removeComments": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "strictNullChecks": true
   },
   "include": ["src/**/*", "./package.json"],
   "exclude": ["node_modules", "dist"]
