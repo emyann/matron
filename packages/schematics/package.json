@@ -19,8 +19,8 @@
   },
   "schematics": "./dist/collection.json",
   "scripts": {
-    "start": "npm run build -- -w",
-    "build": "tsc -p tsconfig.json & npm run webpack",
+    "start": "cross-env NODE_ENV=developement npm run build -- -w",
+    "build": "npm run webpack & tsc -p tsconfig.json",
     "webpack": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
@@ -45,6 +45,7 @@
     "@types/node": "^10.12.12",
     "@types/webpack": "^4.4.20",
     "copy-webpack-plugin": "^4.6.0",
+    "cross-env": "^5.2.0",
     "ts-loader": "^5.3.1",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.7.0",
