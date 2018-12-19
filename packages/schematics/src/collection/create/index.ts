@@ -20,23 +20,19 @@ import {
 interface Schema {
   name: string;
   template: string;
+  provider: 'local';
 }
 export function create(options: Schema): Rule {
   return (host: Tree, context: SchematicContext) => {
-    // console.log('options', options);
-
     const movePath = normalize('/' + strings.dasherize(options.name));
-    const installTemplate = (template: string) => {
-      console.log('installing template', template);
 
-      const command = 'npm';
-      const args = ['install', template, '--loglevel', 'error'];
-
-      spawn.sync(command, args, { stdio: 'inherit', cwd: path.resolve(__dirname) });
-    };
-    const templateName = `@matron/${options.template}`;
-    installTemplate(templateName);
-
+    let templateName;
+    if (options.provider !== 'local') {
+      templateName = `@matron/${options.template}`;
+      installTemplate(templateName);
+    } else {
+      templateName = `@matron/templates/${options.template}`;
+    }
     const templatePath = path.resolve(__dirname, '../../../node_modules', templateName);
     const template = apply(url(templatePath), [move(movePath)]);
 
@@ -52,4 +48,13 @@ export function updatePackageJson(options: Schema): Rule {
       return { scripts, devDependencies, version, main, description };
     });
   };
+}
+
+function installTemplate(templateName: string) {
+  console.log('installing template', templateName);
+
+  const command = 'npm';
+  const args = ['install', templateName, '--loglevel', 'error'];
+
+  spawn.sync(command, args, { stdio: 'inherit', cwd: path.resolve(__dirname) });
 }
