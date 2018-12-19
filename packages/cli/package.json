@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node ./src/cli.ts",
+    "dev": "cross-env NODE_ENV=developement ts-node ./src/cli.ts",
     "prod": "npm run build && node ./dist/cli.js",
     "server": "nodemon ./src/cli.ts",
     "start": "npm run dev"
@@ -37,6 +37,7 @@
     "@angular-devkit/schematics-cli": "^0.11.2",
     "@types/commander": "^2.12.2",
     "@types/node": "^10.12.11",
+    "cross-env": "^5.2.0",
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.1"
