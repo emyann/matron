@@ -15,22 +15,22 @@ enum TestFramework {
   Jest = 'jest'
 }
 interface CreateOptions {
-  type: ApplicationType;
-  bundler: Bundler;
-  test: TestFramework;
-  template: string;
-  skipInstall: boolean;
+  type?: ApplicationType;
+  bundler?: Bundler;
+  test?: TestFramework;
+  template?: string;
+  skipInstall?: boolean;
 }
 
+// alias, flag, description, default value
 program
   .option('-a, --type [name]', `typescript`, 'typescript')
   .option('-b, --bundler [name]', `webpack, parcel`)
   .option('-t, --test [name]', `karma-jasmine, jest`)
   .option('-p, --template [name]', `typescript_webpack_jest, typescript_parcel_jest...`)
   .option('-s, --skipInstall', `Skill npm depencies installation`, false)
-
   .arguments('<project-name>')
-  .action((name: any) => {
+  .action((name: string) => {
     const options = {
       type: program.type,
       bundler: program.bundler,
@@ -67,7 +67,7 @@ function create(name: string, options: CreateOptions) {
   const SCHEMATICS_MODULE = '@matron/schematics';
 
   const { bundler, template, test, type } = options;
-  if (typeof name === 'undefined') {
+  if (!name) {
     console.error('Please specify the project directory:');
     console.log(`  ${chalk.cyan(program.name())} ${chalk.green('<project-name>')}`);
     console.log();
@@ -84,14 +84,14 @@ function create(name: string, options: CreateOptions) {
     );
     console.log(bundler, test, type);
     const command = 'schematics';
-    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', template];
+    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', template, '--provider', 'local'];
     spawn.sync(command, args, { stdio: 'inherit' });
     // console.log(template, res);
   } else if (type) {
     // Only Typscript is supported atm
     const templateName = generateTemplateName(options);
     const command = 'schematics';
-    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', templateName];
+    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', templateName, '--provider', 'local'];
 
     spawn.sync(command, args, { stdio: 'inherit' });
   }
