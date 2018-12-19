@@ -2,7 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "start": "lerna add --exact @matron/schematics --scope=matron & lerna add --exact --dev @matron/templates --scope=@matron/schematics & lerna bootstrap"
+    "postinstall": "lerna add --exact @matron/schematics --scope=matron & lerna add --exact --dev @matron/templates --scope=@matron/schematics & lerna bootstrap",
+    "start": "lerna exec --scope @matron/schematics --scope matron -- npm run start",
+    "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build"
   },
   "devDependencies": {
     "lerna": "^3.6.0"
