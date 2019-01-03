@@ -7,11 +7,13 @@ import { TestFramework } from './typings';
 // alias, flag, description, default value
 program
   .option('-p, --path [directory]')
+  .option('-s, --skipInstall', `Skill npm depencies installation`, false)
   .arguments('<recipe>')
   .action((recipe: string) => {
     const options = {
       recipe,
-      path: program.path
+      path: program.path,
+      skipInstall: program.skipInstall
     };
     add(options);
   });
@@ -30,6 +32,7 @@ program.parse(process.argv);
 interface AddOptions {
   recipe: string;
   path: string;
+  skipInstall: boolean;
 }
 function add(options: AddOptions) {
   const { path, recipe } = options;
@@ -38,6 +41,9 @@ function add(options: AddOptions) {
   const task = { command: 'schematics', args: ['@matron/schematics:add', '--recipe', recipe] };
   console.log('executing task', task, path);
   executeTask(task, path);
+  if (!options.skipInstall) {
+    executeTask({ command: 'npm', args: ['install', '--loglevel', 'error'] }, path);
+  }
 }
 
 interface Task {
