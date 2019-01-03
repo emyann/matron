@@ -1,5 +1,5 @@
 import { Tree, Rule } from '@angular-devkit/schematics';
-import * as stripJsonComments from 'strip-json-comments';
+import stripJsonComments from 'strip-json-comments';
 
 /**
  * This method is specifically for reading JSON files in a Tree

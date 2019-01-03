@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": "tsconfig",
     "lib": ["es2018", "dom"],
-    // "declaration": true,
     "allowJs": true,
+    "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
