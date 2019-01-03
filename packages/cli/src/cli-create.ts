@@ -3,17 +3,8 @@ import * as program from 'commander';
 import chalk from 'chalk';
 import * as spawn from 'cross-spawn';
 import * as path from 'path';
-enum ApplicationType {
-  Typescript = 'typescript'
-}
-enum Bundler {
-  Webpack = 'webpack',
-  Parcel = 'parcel'
-}
-enum TestFramework {
-  KarmaJasmine = 'karma-jasmine',
-  Jest = 'jest'
-}
+import { ApplicationType, Bundler, TestFramework } from './typings';
+
 interface CreateOptions {
   type?: ApplicationType;
   bundler?: Bundler;
@@ -113,6 +104,8 @@ function npmInstall(path: string) {
 
 function printFinalMessage(projetPath: string) {
   console.log(`Project successfully created at ${chalk.green(projetPath)}`);
+  console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
+
 }
 function generateTemplateName({ type, bundler, test }: CreateOptions) {
   let templateName = '';

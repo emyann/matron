@@ -2,11 +2,19 @@ import * as program from 'commander';
 import chalk from 'chalk';
 import * as spawn from 'cross-spawn';
 import * as path from 'path';
+import { TestFramework } from './typings';
 
 // alias, flag, description, default value
-program.arguments('<recipe>').action((recipe: string) => {
-  add(recipe);
-});
+program
+  .option('-p, --path [directory]')
+  .arguments('<recipe>')
+  .action((recipe: string) => {
+    const options = {
+      recipe,
+      path: program.path
+    };
+    add(options);
+  });
 
 program.on('--help', function() {
   console.log(
@@ -19,12 +27,17 @@ Examples
 
 program.parse(process.argv);
 
-function add(recipe: string) {
-  console.log('running add command');
-  const path =  './temp/twkj'
-  executeTask({ command: 'npm', args: ['install', '--save-dev', 'jest'] }, path);
-  executeTask({ command: 'npx', args: ['jest', '--init'] }, path);
+interface AddOptions {
+  recipe: string;
+  path: string;
+}
+function add(options: AddOptions) {
+  const { path, recipe } = options;
+  console.log(`Add ${recipe}`);
 
+  const task = { command: 'schematics', args: ['@matron/schematics:add', '--recipe', recipe] };
+  console.log('executing task', task, path);
+  executeTask(task, path);
 }
 
 interface Task {
@@ -32,9 +45,9 @@ interface Task {
   args?: string[];
 }
 
-function executeTask(task: Task, directoryPath?:string) {
-  if(!directoryPath){
+export function executeTask(task: Task, directoryPath?: string) {
+  if (!directoryPath) {
     directoryPath = path.resolve(process.cwd());
   }
-  spawn.sync(task.command, task.args, { stdio: 'inherit',  cwd: directoryPath });
+  spawn.sync(task.command, task.args, { stdio: 'inherit', cwd: directoryPath });
 }
