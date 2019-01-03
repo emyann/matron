@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "AddSchematic",
+  "title": "add a recipe",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "recipe": {
+      "type": "string",
+      "description": "Recipe to add"
+    }
+  },
+  "required": ["recipe"]
+}

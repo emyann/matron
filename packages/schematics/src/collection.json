@@ -5,6 +5,11 @@
       "description": "Create",
       "factory": "./collection/create/index#create",
       "schema": "./collection/create/schema.json"
+    },
+    "add": {
+      "description": "Create",
+      "factory": "./collection/add/index#add",
+      "schema": "./collection/add/schema.json"
     }
   }
 }
