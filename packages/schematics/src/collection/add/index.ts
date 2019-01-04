@@ -13,12 +13,12 @@ import {
 
 import path from 'path';
 import spawn from 'cross-spawn';
-import { updateJsonInTree } from '../../helpers/ast-utils';
+import { updateJsonInTree, serializeJson } from '../../helpers/ast-utils';
 import { SpawnSyncOptions } from 'child_process';
 
 interface Recipe {
   tasks?: Task[];
-  rules?: Rule[];
+  rules?: ((options: AddSchema) => Rule)[];
 }
 interface RecipeRegistry {
   [recipeId: string]: Recipe;
@@ -39,29 +39,48 @@ function getDependenciesLatestVersion(...dependencies: string[]) {
     {} as NPMDependencies
   );
 }
-const ts_indexTs = `export function main() {
-  console.log('Hello World!');
-}
 
-main();
-`;
 const recipes: RecipeRegistry = {
   typescript: {
     // tasks: [{ command: 'npm', args: ['init', '-y'] }, { command: 'tsc', args: ['--init'] }],
     rules: [
-      addFile('./src/index.ts', ts_indexTs),
-      updateJsonInTree('./nodemon.json', () => ({
-        watch: ['src/**/*.ts'],
-        execMap: {
-          ts: 'ts-node',
-          js: 'node'
-        }
-      })),
-      updatePackageJson({
-        main: 'src/index.ts',
-        scripts: { start: 'nodemon src/index.ts', build: 'tsc' },
-        devDependencies: getDependenciesLatestVersion('cross-env', 'nodemon', 'ts-node', 'typescript')
-      })
+      ({ projectPath }) =>
+        addFile(
+          `${projectPath}/tsconfig.json`,
+          serializeJson({
+            compilerOptions: {
+              target: 'ES2015',
+              module: 'commonjs',
+              sourceMap: true,
+              declaration: true,
+              outDir: 'dist',
+              strict: true,
+              removeComments: true,
+              esModuleInterop: true
+            },
+            include: ['src/**/*']
+          })
+        ),
+      ({ projectPath }) =>
+        updatePackageJson(
+          {
+            main: 'src/index.ts',
+            scripts: { start: 'nodemon src/index.ts', build: 'tsc' },
+            devDependencies: getDependenciesLatestVersion('cross-env', 'nodemon', 'ts-node', 'typescript')
+          },
+          projectPath
+        ),
+      ({ projectPath }) =>
+        addFile(
+          `${projectPath}/nodemon.json`,
+          serializeJson({
+            watch: ['src/**/*.ts'],
+            execMap: {
+              ts: 'ts-node',
+              js: 'node'
+            }
+          })
+        )
     ]
   },
   jest: {
@@ -69,18 +88,19 @@ const recipes: RecipeRegistry = {
       { command: 'npm', args: ['install', '--save-dev', 'jest', 'typescript', 'ts-jest', '@types/jest'] },
       { command: 'node_modules/.bin/ts-jest', args: ['config:init'] }
     ],
-    rules: [updatePackageJson({ scripts: { test: 'jest' } })]
+    rules: [() => updatePackageJson({ scripts: { test: 'jest' } })]
   },
   parcel: {
     tasks: [{ command: 'npm', args: ['install', '--save-dev', 'parcel-bundler', 'typescript'] }],
     rules: [
-      updatePackageJson({
-        scripts: {
-          start: 'parcel serve src/index.html',
-          build: 'cross-env NODE_ENV=production parcel build src/index.html --public-url .'
-        }
-      }),
-      addIndexHtml()
+      () =>
+        updatePackageJson({
+          scripts: {
+            start: 'parcel serve src/index.html',
+            build: 'cross-env NODE_ENV=production parcel build src/index.html --public-url .'
+          }
+        }),
+      () => addIndexHtml()
     ]
   }
 };
@@ -102,7 +122,12 @@ export function add(options: AddSchema): Rule {
       });
     }
 
-    const rules = recipe.rules ? recipe.rules : [];
+    let rules: Rule[] = [];
+    if (recipe.rules) {
+      recipe.rules.forEach(fn => {
+        rules.push(fn(options));
+      });
+    }
     const templateSource = apply(url('./files/typescript'), [
       template({
         jsonPackage: { name: projectName }
@@ -110,7 +135,7 @@ export function add(options: AddSchema): Rule {
       move(projectPath)
     ]);
 
-    rules.unshift(branchAndMerge(chain([mergeWith(templateSource)])));
+    rules.unshift(() => branchAndMerge(chain([mergeWith(templateSource)])));
 
     return chain(rules)(host, context);
   };
