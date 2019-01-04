@@ -39,7 +39,6 @@
     "typescript": "~3.1.6"
   },
   "devDependencies": {
-    "@matron/templates": "0.0.0",
     "@types/copy-webpack-plugin": "^4.4.2",
     "@types/cross-spawn": "^6.0.0",
     "@types/node": "^10.12.12",

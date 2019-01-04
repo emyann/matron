@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "lib/cli.js",
   "bin": {
-    "cli": "bin/cli"
+    "matron": "dist/src/cli.js"
   },
   "directories": {
     "lib": "lib"
@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "cross-env NODE_ENV=developement ts-node ./src/cli.ts",
-    "prod": "npm run build && node ./dist/cli.js",
+    "prod": "npm run build && node ./dist/src/cli.js",
     "server": "nodemon ./src/cli.ts",
     "start": "npm run dev"
   },
