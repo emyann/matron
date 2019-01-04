@@ -1,7 +1,7 @@
 {
   "name": "matron",
   "version": "0.5.0",
-  "description": "> TODO: description",
+  "description": "CLI fot Typescript and Rapid Appplication Development",
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "homepage": "",
   "license": "MIT",
