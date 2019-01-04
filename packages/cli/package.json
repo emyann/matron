@@ -5,9 +5,9 @@
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "homepage": "",
   "license": "MIT",
-  "files": [
-    "dist"
-  ],
+  "directories": {
+    "bin": "dist"
+  },
   "publishConfig": {
     "access": "public"
   },
