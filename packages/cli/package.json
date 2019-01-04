@@ -1,6 +1,6 @@
 {
   "name": "matron",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "> TODO: description",
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "homepage": "",
@@ -27,7 +27,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@matron/schematics": "0.0.0",
+    "@matron/schematics": "^0.1.0",
     "@types/cross-spawn": "^6.0.0",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
