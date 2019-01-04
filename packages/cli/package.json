@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "lib/cli.js",
   "bin": {
-    "matron": "dist/src/cli.js"
+    "matron": "src/cli.js"
   },
   "directories": {
     "lib": "lib"
