@@ -9,7 +9,6 @@
     "matron": "src/cli.js"
   },
   "files": [
-    "dist/src",
     "dist"
   ],
   "publishConfig": {
