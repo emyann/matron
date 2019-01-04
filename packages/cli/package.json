@@ -9,11 +9,8 @@
   "bin": {
     "matron": "src/cli.js"
   },
-  "directories": {
-    "lib": "lib"
-  },
   "files": [
-    "dist"
+    "src"
   ],
   "publishConfig": {
     "access": "public"
