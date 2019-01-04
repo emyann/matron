@@ -5,7 +5,7 @@
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "homepage": "",
   "license": "MIT",
-  "main": "lib/cli.js",
+  "main": "src/cli.js",
   "bin": {
     "matron": "src/cli.js"
   },
@@ -13,8 +13,7 @@
     "lib": "lib"
   },
   "files": [
-    "dist",
-    "bin"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
