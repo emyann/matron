@@ -6,7 +6,7 @@
   "homepage": "",
   "license": "MIT",
   "bin": {
-    "matron": "dist/src/cli.js"
+    "matron": "dist/cli.js"
   },
   "files": [
     "dist"
@@ -16,7 +16,8 @@
     "dev": "cross-env NODE_ENV=developement ts-node ./src/cli.ts",
     "prod": "npm run build && node ./dist/src/cli.js",
     "server": "nodemon ./src/cli.ts",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "prepublishOnly": "cp -r ./dist/src/* ./dist && rm ./dist/package.json && rm -rf ./dist/src"
   },
   "dependencies": {
     "@matron/schematics": "0.4.0",
