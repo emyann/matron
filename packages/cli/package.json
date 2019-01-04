@@ -13,8 +13,7 @@
     "lib": "lib"
   },
   "files": [
-    "bin",
-    "lib"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
