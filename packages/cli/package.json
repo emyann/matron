@@ -34,5 +34,6 @@
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.1"
-  }
+  },
+  "gitHead": "c0c73baa0bb890adf2a44fe3da4dd4efcfdb797e"
 }
