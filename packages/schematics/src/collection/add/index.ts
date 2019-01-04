@@ -1,43 +1,125 @@
-import { Rule, SchematicContext, chain, Tree } from '@angular-devkit/schematics';
+import {
+  Rule,
+  SchematicContext,
+  chain,
+  Tree,
+  branchAndMerge,
+  mergeWith,
+  url,
+  move,
+  apply,
+  template
+} from '@angular-devkit/schematics';
 
 import path from 'path';
 import spawn from 'cross-spawn';
 import { updateJsonInTree } from '../../helpers/ast-utils';
+import { SpawnSyncOptions } from 'child_process';
 
 interface Recipe {
-  tasks: Task[];
+  tasks?: Task[];
   rules?: Rule[];
 }
 interface RecipeRegistry {
   [recipeId: string]: Recipe;
 }
+
+type NPMDependencies = { [dependency: string]: string };
+function getDependenciesLatestVersion(...dependencies: string[]) {
+  return dependencies.reduce(
+    (acc, dep) => {
+      const response = executeTask(
+        { command: 'npm', args: ['view', dep, 'dist-tags.latest'] },
+        { stdio: [process.stdout] }
+      );
+      const latestVersion = response.stdout.toString().replace(/\n/g, '');
+      acc[dep] = `^${latestVersion}`;
+      return acc;
+    },
+    {} as NPMDependencies
+  );
+}
+const ts_indexTs = `export function main() {
+  console.log('Hello World!');
+}
+
+main();
+`;
 const recipes: RecipeRegistry = {
+  typescript: {
+    // tasks: [{ command: 'npm', args: ['init', '-y'] }, { command: 'tsc', args: ['--init'] }],
+    rules: [
+      addFile('./src/index.ts', ts_indexTs),
+      updateJsonInTree('./nodemon.json', () => ({
+        watch: ['src/**/*.ts'],
+        execMap: {
+          ts: 'ts-node',
+          js: 'node'
+        }
+      })),
+      updatePackageJson({
+        main: 'src/index.ts',
+        scripts: { start: 'nodemon src/index.ts', build: 'tsc' },
+        devDependencies: getDependenciesLatestVersion('cross-env', 'nodemon', 'ts-node', 'typescript')
+      })
+    ]
+  },
   jest: {
     tasks: [
       { command: 'npm', args: ['install', '--save-dev', 'jest', 'typescript', 'ts-jest', '@types/jest'] },
-      { command: 'node_modules/.bin/ts-jest config:init' }
+      { command: 'node_modules/.bin/ts-jest', args: ['config:init'] }
     ],
-    rules: [updatePackageJsonForJest()]
+    rules: [updatePackageJson({ scripts: { test: 'jest' } })]
   },
   parcel: {
     tasks: [{ command: 'npm', args: ['install', '--save-dev', 'parcel-bundler', 'typescript'] }],
-
-    rules: [updatePackageJsonForParcel(), addIndexHtml()]
+    rules: [
+      updatePackageJson({
+        scripts: {
+          start: 'parcel serve src/index.html',
+          build: 'cross-env NODE_ENV=production parcel build src/index.html --public-url .'
+        }
+      }),
+      addIndexHtml()
+    ]
   }
 };
-interface Schema {
+
+export interface AddSchema {
   recipe: string;
+  projectPath: string;
+  projectName: string;
 }
-export function add(options: Schema): Rule {
+export function add(options: AddSchema): Rule {
   return (host: Tree, context: SchematicContext) => {
-    const { recipe: recipeId } = options;
+    const { recipe: recipeId, projectPath = path.resolve(process.cwd()), projectName } = options;
     console.log('running add schematic with options', recipeId, options);
     const recipe = recipes[recipeId];
-    recipe.tasks.forEach(task => {
-      executeTask(task);
-    });
+    if (recipe && recipe.tasks) {
+      recipe.tasks.forEach(task => {
+        console.log('executing task', task, projectPath);
+        executeTask(task, { cwd: projectPath });
+      });
+    }
+
     const rules = recipe.rules ? recipe.rules : [];
+    const templateSource = apply(url('./files/typescript'), [
+      template({
+        jsonPackage: { name: projectName }
+      }),
+      move(projectPath)
+    ]);
+
+    rules.unshift(branchAndMerge(chain([mergeWith(templateSource)])));
+
     return chain(rules)(host, context);
+  };
+}
+
+function addFile(path: string, content: string): Rule {
+  return (host: Tree, _context: SchematicContext) => {
+    host.create(path, content);
+    return host;
   };
 }
 
@@ -60,29 +142,28 @@ function addIndexHtml(): Rule {
     return host;
   };
 }
-export function updatePackageJsonForParcel(options: any = {}): Rule {
-  return (_host: Tree, _context: SchematicContext) => {
-    const { projectPath = './' } = options;
-    return updateJsonInTree(projectPath + '/package.json', json => {
-      console.log('updateJsonInTree', json);
-      const packageJson = {
-        scripts: {
-          start: 'parcel serve src/index.html',
-          build: 'cross-env NODE_ENV=production parcel build src/index.html --public-url .'
-        }
-      };
-      return { ...json, scripts: { ...json.scripts, ...packageJson.scripts } };
-    });
-  };
-}
 
-export function updatePackageJsonForJest(options?: any): Rule {
+interface JSONPackage {
+  name?: string;
+  version?: string;
+  description?: string;
+  main?: string;
+  scripts?: {};
+  dependencies?: NPMDependencies;
+  devDependencies?: NPMDependencies;
+  keywords?: string[];
+  author?: string;
+  license?: string;
+}
+export function updatePackageJson(packageJson: JSONPackage, projetPath = './'): Rule {
   return (_host: Tree, _context: SchematicContext) => {
-    const { projectPath = './' } = options;
-    return updateJsonInTree(projectPath + '/package.json', json => {
-      console.log('updateJsonInTree', json);
-      const packageJson = { scripts: { test: 'jest' } };
-      return { ...json, ...packageJson };
+    return updateJsonInTree<JSONPackage>(projetPath + '/package.json', json => {
+      return {
+        ...json,
+        ...packageJson,
+        scripts: { ...json.scripts, ...packageJson.scripts },
+        devDependencies: { ...json.devDependencies, ...packageJson.devDependencies }
+      };
     });
   };
 }
@@ -91,9 +172,11 @@ interface Task {
   command: string;
   args?: string[];
 }
-export function executeTask(task: Task, directoryPath?: string) {
-  if (!directoryPath) {
-    directoryPath = path.resolve(process.cwd());
+export function executeTask(task: Task, options: SpawnSyncOptions = { stdio: 'inherit' }) {
+  const { stdio } = options;
+  let { cwd } = options;
+  if (!cwd) {
+    cwd = path.resolve(process.cwd());
   }
-  spawn.sync(task.command, task.args, { stdio: 'inherit', cwd: directoryPath });
+  return spawn.sync(task.command, task.args, { stdio, cwd });
 }
