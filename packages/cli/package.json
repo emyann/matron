@@ -5,12 +5,12 @@
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "homepage": "",
   "license": "MIT",
-  "main": "test/src/cli.js",
+  "main": "src/cli.js",
   "bin": {
     "matron": "src/cli.js"
   },
   "files": [
-    "src"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
