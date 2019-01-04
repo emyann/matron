@@ -5,7 +5,9 @@
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "homepage": "",
   "license": "MIT",
-  "bin": "dist/src/cli.js",
+  "bin": {
+    "matron": "dist/src/cli.js"
+  },
   "files": [
     "dist"
   ],
@@ -17,7 +19,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
-    "@matron/schematics": "^0.4.0",
+    "@matron/schematics": "0.4.0",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "cross-spawn": "^6.0.5"
