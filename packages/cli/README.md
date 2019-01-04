@@ -1,13 +1,13 @@
-# `@matron/cli`
+# `matron`
 
 > TODO: description
 
 ## Usage
 
 ```
-npm -g i @matron/cli
+npm -g i matron
 
-cli --help
+matron --help
 
 // TODO: DEMONSTRATE API
 ```
