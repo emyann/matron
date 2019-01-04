@@ -10,7 +10,7 @@
     "matron": "src/cli.js"
   },
   "files": [
-    "dist"
+    "dist/src"
   ],
   "publishConfig": {
     "access": "public"
