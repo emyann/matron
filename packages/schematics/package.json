@@ -27,7 +27,6 @@
   "dependencies": {
     "@angular-devkit/core": "^7.1.0",
     "@angular-devkit/schematics": "^7.1.0",
-    "@angular-devkit/schematics-cli": "^0.11.0",
     "cross-spawn": "^6.0.5",
     "strip-json-comments": "^2.0.1"
   },
