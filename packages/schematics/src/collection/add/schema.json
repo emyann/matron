@@ -8,6 +8,10 @@
     "recipe": {
       "type": "string",
       "description": "Recipe to add"
+    },
+    "projectPath": {
+      "type": "string",
+      "description": "Path to apply the schematics"
     }
   },
   "required": ["recipe"]

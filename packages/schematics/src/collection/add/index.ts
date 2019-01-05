@@ -42,7 +42,6 @@ function getDependenciesLatestVersion(...dependencies: string[]) {
 
 const recipes: RecipeRegistry = {
   typescript: {
-    // tasks: [{ command: 'npm', args: ['init', '-y'] }, { command: 'tsc', args: ['--init'] }],
     rules: [
       ({ projectPath }) =>
         addFile(
@@ -113,7 +112,7 @@ export interface AddSchema {
 export function add(options: AddSchema): Rule {
   return (host: Tree, context: SchematicContext) => {
     const { recipe: recipeId, projectPath = path.resolve(process.cwd()), projectName } = options;
-    console.log('running add schematic with options', recipeId, options);
+    // console.log('running add schematic with options', recipeId, options);
     const recipe = recipes[recipeId];
     if (recipe && recipe.tasks) {
       recipe.tasks.forEach(task => {
@@ -122,12 +121,6 @@ export function add(options: AddSchema): Rule {
       });
     }
 
-    let rules: Rule[] = [];
-    if (recipe.rules) {
-      recipe.rules.forEach(fn => {
-        rules.push(fn(options));
-      });
-    }
     const templateSource = apply(url('./files/typescript'), [
       template({
         jsonPackage: { name: projectName }
@@ -135,7 +128,12 @@ export function add(options: AddSchema): Rule {
       move(projectPath)
     ]);
 
-    rules.unshift(() => branchAndMerge(chain([mergeWith(templateSource)])));
+    let rules: Rule[] = [branchAndMerge(chain([mergeWith(templateSource)]))];
+    if (recipe.rules) {
+      recipe.rules.forEach(fn => {
+        rules.push(fn(options));
+      });
+    }
 
     return chain(rules)(host, context);
   };
