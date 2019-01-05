@@ -15,8 +15,7 @@
     "build": "tsc",
     "prod": "npm run build && node ./dist/matron.js",
     "server": "nodemon ./src/matron.ts",
-    "start": "cross-env NODE_ENV=developement ts-node ./src/matron.ts",
-    "prepublishOnly": "cp -r ./dist/src/* ./dist && rm ./dist/package.json && rm -rf ./dist/src"
+    "start": "cross-env NODE_ENV=developement ts-node ./src/matron.ts"
   },
   "dependencies": {
     "@matron/schematics": "^0.6.0",
@@ -33,6 +32,5 @@
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.1"
-  },
-  "gitHead": "c0c73baa0bb890adf2a44fe3da4dd4efcfdb797e"
+  }
 }
