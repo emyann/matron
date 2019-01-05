@@ -1,6 +1,6 @@
 {
   "name": "@matron/schematics",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Matron Schematics actions used by matron cli",
   "keywords": [
     "schematics"
@@ -34,17 +34,17 @@
   "devDependencies": {
     "@types/copy-webpack-plugin": "^4.4.2",
     "@types/cross-spawn": "^6.0.0",
+    "@types/jasmine": "^2.6.0",
     "@types/node": "^10.12.18",
+    "@types/strip-json-comments": "0.0.30",
     "@types/webpack": "^4.4.20",
     "copy-webpack-plugin": "^4.6.0",
     "cross-env": "^5.2.0",
+    "jasmine": "^2.8.0",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.7.0",
     "typescript": "^3.2.2",
     "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2",
-    "jasmine": "^2.8.0",
-    "@types/jasmine": "^2.6.0",
-    "@types/strip-json-comments": "0.0.30"
+    "webpack-cli": "^3.1.2"
   }
 }
