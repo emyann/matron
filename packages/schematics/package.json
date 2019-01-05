@@ -28,13 +28,8 @@
     "@angular-devkit/core": "^7.1.0",
     "@angular-devkit/schematics": "^7.1.0",
     "@angular-devkit/schematics-cli": "^0.11.0",
-    "@types/jasmine": "^2.6.0",
-    "@types/strip-json-comments": "0.0.30",
     "cross-spawn": "^6.0.5",
-    "jasmine": "^2.8.0",
-    "rxjs": "^6.3.3",
-    "strip-json-comments": "^2.0.1",
-    "typescript": "~3.1.6"
+    "strip-json-comments": "^2.0.1"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^4.4.2",
@@ -47,6 +42,9 @@
     "tsconfig-paths": "^3.7.0",
     "typescript": "^3.2.2",
     "webpack": "^4.27.1",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "jasmine": "^2.8.0",
+    "@types/jasmine": "^2.6.0",
+    "@types/strip-json-comments": "0.0.30"
   }
 }
