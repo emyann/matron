@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "postinstall": "lerna add --exact @matron/schematics --scope=matron & lerna bootstrap",
+    "bootstrap": "lerna bootstrap",
+    "prestart": "npm run bootstrap",
     "start": "lerna exec --scope @matron/schematics --scope matron -- npm run start",
     "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build"
   },
