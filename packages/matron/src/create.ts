@@ -1,4 +1,3 @@
-import program from 'commander';
 import chalk from 'chalk';
 import spawn from 'cross-spawn';
 import path from 'path';
@@ -61,12 +60,12 @@ function create(options: CreateOptions) {
   const { bundler, template, test } = options;
   if (!name) {
     console.error('Please specify the project directory:');
-    console.log(`  ${chalk.cyan(program.name())} ${chalk.green('<project-name>')}`);
+    console.log(`  ${chalk.cyan('matron')} ${chalk.green('<project-name>')}`);
     console.log();
     console.log('For example:');
-    console.log(`  ${chalk.cyan(program.name())} ${chalk.green('my-typescript-lib')}`);
+    console.log(`  ${chalk.cyan('matron')} ${chalk.green('my-typescript-lib')}`);
     console.log();
-    console.log(`Run ${chalk.cyan(`${program.name()} --help`)} to see all options.`);
+    console.log(`Run ${chalk.cyan(`${'matron'} --help`)} to see all options.`);
     process.exit(1);
   }
 
