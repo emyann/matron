@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import yargs from 'yargs';
-import { createCommand } from './cli-create';
-import { addCommand } from './cli-add';
+import { createCommand } from './create';
+import { addCommand } from './add';
 import chalk from 'chalk';
 
 const usage = `

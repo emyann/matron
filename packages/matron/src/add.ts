@@ -1,8 +1,5 @@
-import * as program from 'commander';
-import chalk from 'chalk';
-import * as spawn from 'cross-spawn';
-import * as path from 'path';
-import { TestFramework } from './typings';
+import spawn from 'cross-spawn';
+import path from 'path';
 import { CommandModule } from 'yargs';
 
 export const addCommand: CommandModule<AddOptions, AddOptions> = {
@@ -22,7 +19,6 @@ export const addCommand: CommandModule<AddOptions, AddOptions> = {
     }
   },
   handler: args => {
-    console.log('args', args);
     const options = {
       recipe: args.recipe,
       path: args.path,

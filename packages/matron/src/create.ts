@@ -1,10 +1,9 @@
-import { parse, arguments, action, option, name } from 'commander';
 import program from 'commander';
 import chalk from 'chalk';
 import spawn from 'cross-spawn';
 import path from 'path';
-import { ApplicationType, Bundler, TestFramework } from './typings';
-import { CommandBuilder, CommandModule } from 'yargs';
+import { Bundler, TestFramework } from './typings';
+import { CommandModule } from 'yargs';
 
 interface CreateOptions {
   name: string;
@@ -14,7 +13,7 @@ interface CreateOptions {
   skipInstall?: boolean;
 }
 
-export const createCommand: CommandModule<any, any> = {
+export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
   command: 'create <name>',
   describe: 'Start a Typescript Project',
   builder: {
@@ -37,7 +36,7 @@ export const createCommand: CommandModule<any, any> = {
     },
     'skip-install': {
       alias: 's',
-      describe: 'Skip npm depencies installation',
+      describe: 'Skip npm dependencies installation',
       type: 'boolean',
       boolean: true
     }
