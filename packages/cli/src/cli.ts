@@ -1,9 +1,27 @@
 #!/usr/bin/env node
-import version from './version';
-import { command, parse } from 'commander';
 
-version();
-command('create <name>', 'Create a Typescript project');
-command('add <recipe>', 'Runs a recipe against the current project');
+import yargs from 'yargs';
+import { createCommand } from './cli-create';
+import { addCommand } from './cli-add';
+import chalk from 'chalk';
 
-parse(process.argv);
+const usage = `
+Usage
+  ${chalk.bgYellow(chalk.black('Using flags'))}
+    ${'matron'} create --type ${chalk.green('typescript')} --bundler ${chalk.yellow('webpack')} --test ${chalk.magenta(
+  'jest'
+)}
+
+  ${chalk.bgYellow(chalk.black('Using a naming convention'))}
+    ${'matron'} create --template ${chalk.green('[TYPE]')}-${chalk.yellow('[BUNDLER]')}-${chalk.magenta(
+  '[TESTFRAMEWORK]'
+)}
+    ${'matron'} create --template ${chalk.green('typescript')}-${chalk.yellow('parcel')}-${chalk.magenta(
+  'karma-jasmine'
+)}
+  `;
+
+yargs.usage(usage);
+yargs.command(createCommand);
+yargs.command(addCommand);
+yargs.help().wrap(110).argv;

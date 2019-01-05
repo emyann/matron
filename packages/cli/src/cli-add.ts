@@ -3,31 +3,59 @@ import chalk from 'chalk';
 import * as spawn from 'cross-spawn';
 import * as path from 'path';
 import { TestFramework } from './typings';
+import { CommandModule } from 'yargs';
 
-// alias, flag, description, default value
-program
-  .option('-p, --path [directory]')
-  .option('-s, --skipInstall', `Skill npm depencies installation`, false)
-  .arguments('<recipe>')
-  .action((recipe: string) => {
+export const addCommand: CommandModule<AddOptions, AddOptions> = {
+  command: 'add <recipe>',
+  describe: 'Runs a recipe against the current project',
+  builder: {
+    path: {
+      alias: 'p',
+      describe: 'Path where to run the command',
+      type: 'string'
+    },
+    'skip-install': {
+      alias: 's',
+      describe: 'Skip npm dependencies installation',
+      type: 'boolean',
+      boolean: true
+    }
+  },
+  handler: args => {
+    console.log('args', args);
     const options = {
-      recipe,
-      path: program.path,
-      skipInstall: program.skipInstall
+      recipe: args.recipe,
+      path: args.path,
+      skipInstall: args.skipInstall
     };
     add(options);
-  });
+  }
+};
 
-program.on('--help', function() {
-  console.log(
-    `
-Examples
-  ${program.name()} add ${chalk.green('webpack')}
-`
-  );
-});
+// alias, flag, description, default value
+// program
+//   .option('-p, --path [directory]')
+//   .option('-s, --skipInstall', `Skill npm depencies installation`, false)
+//   .arguments('<recipe>')
+//   .action((recipe: string) => {
+//     const options = {
+//       recipe,
+//       path: program.path,
+//       skipInstall: program.skipInstall
+//     };
+//     add(options);
+//   });
 
-program.parse(process.argv);
+// program.on('--help', function() {
+//   console.log(
+//     `
+// Examples
+//   ${program.name()} add ${chalk.green('webpack')}
+// `
+//   );
+// });
+
+// program.parse(process.argv);
 
 interface AddOptions {
   recipe: string;

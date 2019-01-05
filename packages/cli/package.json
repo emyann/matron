@@ -20,16 +20,18 @@
     "prepublishOnly": "cp -r ./dist/src/* ./dist && rm ./dist/package.json && rm -rf ./dist/src"
   },
   "dependencies": {
-    "@matron/schematics": "^0.5.3",
+    "@matron/schematics": "0.5.3",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
-    "cross-spawn": "^6.0.5"
+    "cross-spawn": "^6.0.5",
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
     "@angular-devkit/schematics-cli": "^0.11.2",
     "@types/commander": "^2.12.2",
     "@types/cross-spawn": "^6.0.0",
     "@types/node": "^10.12.11",
+    "@types/yargs": "^12.0.5",
     "cross-env": "^5.2.0",
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",

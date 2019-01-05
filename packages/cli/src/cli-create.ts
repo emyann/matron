@@ -1,63 +1,65 @@
 import { parse, arguments, action, option, name } from 'commander';
-import * as program from 'commander';
+import program from 'commander';
 import chalk from 'chalk';
-import * as spawn from 'cross-spawn';
-import * as path from 'path';
+import spawn from 'cross-spawn';
+import path from 'path';
 import { ApplicationType, Bundler, TestFramework } from './typings';
+import { CommandBuilder, CommandModule } from 'yargs';
 
 interface CreateOptions {
-  type?: ApplicationType;
+  name: string;
   bundler?: Bundler;
   test?: TestFramework;
   template?: string;
   skipInstall?: boolean;
 }
 
-// alias, flag, description, default value
-program
-  .option('-a, --type [name]', `typescript`, 'typescript')
-  .option('-b, --bundler [name]', `webpack, parcel`)
-  .option('-t, --test [name]', `karma-jasmine, jest`)
-  .option('-p, --template [name]', `typescript_webpack_jest, typescript_parcel_jest...`)
-  .option('-s, --skipInstall', `Skill npm depencies installation`, false)
-  .arguments('<project-name>')
-  .action((name: string) => {
+export const createCommand: CommandModule<any, any> = {
+  command: 'create <name>',
+  describe: 'Start a Typescript Project',
+  builder: {
+    bundler: {
+      alias: 'b',
+      describe: 'Set a project bundler',
+      type: 'string',
+      choices: [Bundler.Parcel, Bundler.Webpack]
+    },
+    test: {
+      alias: 't',
+      describe: 'Set a test framework',
+      type: 'string',
+      choices: [TestFramework.Jest, TestFramework.KarmaJasmine]
+    },
+    template: {
+      alias: 'p',
+      describe: 'Set a template',
+      type: 'string'
+    },
+    'skip-install': {
+      alias: 's',
+      describe: 'Skip npm depencies installation',
+      type: 'boolean',
+      boolean: true
+    }
+  },
+  handler: args => {
     const options = {
-      type: program.type,
-      bundler: program.bundler,
-      test: program.test,
-      template: program.template,
-      skipInstall: program.skipInstall
+      name: args.name,
+      type: args.type,
+      bundler: args.bundler,
+      test: args.test,
+      template: args.template,
+      skipInstall: args.skipInstall
     };
-    create(name, options);
-  });
 
-program.on('--help', function() {
-  console.log(
-    `
-Examples
-  ${chalk.bgYellow(chalk.black('Using flags'))} 
-    ${program.name()} create --type ${chalk.green('typescript')} --bundler ${chalk.yellow(
-      'webpack'
-    )} --test ${chalk.magenta('jest')} 
-  
-  ${chalk.bgYellow(chalk.black('Using a naming convention'))} 
-    ${program.name()} create --template ${chalk.green('[TYPE]')}-${chalk.yellow('[BUNDLER]')}-${chalk.magenta(
-      '[TESTFRAMEWORK]'
-    )}
-    ${program.name()} create --template ${chalk.green('typescript')}-${chalk.yellow('parcel')}-${chalk.magenta(
-      'karma-jasmine'
-    )}
-`
-  );
-});
+    create(options);
+  }
+};
 
-program.parse(process.argv);
-
-function create(name: string, options: CreateOptions) {
+function create(options: CreateOptions) {
   const SCHEMATICS_MODULE = '@matron/schematics';
-
-  const { bundler, template, test, type } = options;
+  const { name } = options;
+  const { bundler, template, test } = options;
   if (!name) {
     console.error('Please specify the project directory:');
     console.log(`  ${chalk.cyan(program.name())} ${chalk.green('<project-name>')}`);
@@ -69,16 +71,16 @@ function create(name: string, options: CreateOptions) {
     process.exit(1);
   }
 
-  if (template && (bundler || test || type)) {
+  if (template && (bundler || test)) {
     console.warn(
       'You have specified a template along with a bundler, test or type option. Only the template flag will be used'
     );
-    console.log(bundler, test, type);
+    console.log(bundler, test);
     const command = 'schematics';
     const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', template, '--provider', 'local'];
     spawn.sync(command, args, { stdio: 'inherit' });
     // console.log(template, res);
-  } else if (type) {
+  } else {
     // Only Typscript is supported atm
     const templateName = generateTemplateName(options);
     const command = 'schematics';
@@ -105,11 +107,9 @@ function npmInstall(path: string) {
 function printFinalMessage(projetPath: string) {
   console.log(`Project successfully created at ${chalk.green(projetPath)}`);
   console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
-
 }
-function generateTemplateName({ type, bundler, test }: CreateOptions) {
-  let templateName = '';
-  if (type) templateName = templateName + type;
+function generateTemplateName({ bundler, test }: CreateOptions) {
+  let templateName = 'typescript';
   if (bundler) templateName = templateName + `-${bundler}`;
   if (test) templateName = templateName + `-${test}`;
   return templateName;
