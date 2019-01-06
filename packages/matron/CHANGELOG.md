@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.1](https://github.com/emyann/matron/compare/v0.8.0...v0.8.1) (2019-01-06)
+
+
+### Bug Fixes
+
+* use npx to call schematics cli. will optimize in the future ([2a773fa](https://github.com/emyann/matron/commit/2a773fa))
+
+
+
+
+
 # [0.8.0](https://github.com/emyann/matron/compare/v0.7.2...v0.8.0) (2019-01-06)
 
 
