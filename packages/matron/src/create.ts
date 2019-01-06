@@ -58,6 +58,7 @@ function create(options: CreateOptions) {
   const SCHEMATICS_MODULE = '@matron/schematics';
   const { name } = options;
   const { bundler, template, test } = options;
+
   if (!name) {
     console.error('Please specify the project directory:');
     console.log(`  ${chalk.cyan('matron')} ${chalk.green('<project-name>')}`);
@@ -74,15 +75,33 @@ function create(options: CreateOptions) {
       'You have specified a template along with a bundler, test or type option. Only the template flag will be used'
     );
     console.log(bundler, test);
-    const command = 'schematics';
-    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', template, '--provider', 'local'];
+    const command = 'npx';
+    const args = [
+      '@angular-devkit/schematics-cli',
+      `${SCHEMATICS_MODULE}:create`,
+      '--name',
+      name,
+      '--template',
+      template,
+      '--provider',
+      'local'
+    ];
     spawn.sync(command, args, { stdio: 'inherit' });
     // console.log(template, res);
   } else {
     // Only Typscript is supported atm
     const templateName = generateTemplateName(options);
-    const command = 'schematics';
-    const args = [`${SCHEMATICS_MODULE}:create`, '--name', name, '--template', templateName, '--provider', 'local'];
+    const command = 'npx';
+    const args = [
+      '@angular-devkit/schematics-cli',
+      `${SCHEMATICS_MODULE}:create`,
+      '--name',
+      name,
+      '--template',
+      templateName,
+      '--provider',
+      'local'
+    ];
 
     spawn.sync(command, args, { stdio: 'inherit' });
   }

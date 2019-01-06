@@ -37,9 +37,13 @@ function add(options: AddOptions) {
   const { path, recipe } = options;
   console.log(`Add ${recipe}`);
 
-  const task = { command: 'schematics', args: ['@matron/schematics:add', '--recipe', recipe, '--projectPath', path] };
+  const task = {
+    command: 'npx',
+    args: ['@angular-devkit/schematics-cli', '@matron/schematics:add', '--recipe', recipe, '--projectPath', path]
+  };
   // console.log('executing task', task, path);
   executeTask(task, path);
+  // console.log('options', options);
   if (!options.skipInstall) {
     executeTask({ command: 'npm', args: ['install', '--loglevel', 'error'] }, path);
   }
