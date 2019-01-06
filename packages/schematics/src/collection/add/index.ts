@@ -116,7 +116,7 @@ export function add(options: AddSchema): Rule {
     const recipe = recipes[recipeId];
     if (recipe && recipe.tasks) {
       recipe.tasks.forEach(task => {
-        console.log('executing task', task, projectPath);
+        // console.log('executing task', task, projectPath);
         executeTask(task, { cwd: projectPath });
       });
     }

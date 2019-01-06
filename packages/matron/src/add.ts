@@ -38,7 +38,7 @@ function add(options: AddOptions) {
   console.log(`Add ${recipe}`);
 
   const task = { command: 'schematics', args: ['@matron/schematics:add', '--recipe', recipe, '--projectPath', path] };
-  console.log('executing task', task, path);
+  // console.log('executing task', task, path);
   executeTask(task, path);
   if (!options.skipInstall) {
     executeTask({ command: 'npm', args: ['install', '--loglevel', 'error'] }, path);

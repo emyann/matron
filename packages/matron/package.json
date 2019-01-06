@@ -1,21 +1,28 @@
 {
   "name": "matron",
   "version": "0.7.2",
-  "description": "CLI fot Typescript and Rapid Appplication Development",
+  "description": "CLI for Rapid Appplication Development with TypeScript",
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
-  "homepage": "",
+  "keywords": [
+    "Typescript",
+    "Webpack",
+    "Parcel",
+    "Jest",
+    "Karma",
+    "Jasmine"
+  ],
   "license": "MIT",
   "bin": {
-    "matron": "dist/matron.js"
+    "matron": "dist/bin/matron.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
-    "prod": "npm run build && node ./dist/matron.js",
-    "server": "nodemon ./src/matron.ts",
-    "start": "cross-env NODE_ENV=developement ts-node ./src/matron.ts"
+    "prod": "npm run build && node ./dist/bin/matron.js",
+    "server": "nodemon ./bin/matron.ts",
+    "start": "cross-env NODE_ENV=developement ts-node ./bin/matron.ts"
   },
   "dependencies": {
     "@angular-devkit/schematics-cli": "^0.11.2",

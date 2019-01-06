@@ -12,7 +12,6 @@
     "Rollup"
   ],
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
-  "homepage": "",
   "license": "MIT",
   "directories": {
     "lib": "lib"
