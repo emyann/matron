@@ -4,7 +4,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prestart": "npm run bootstrap",
-    "start": "lerna exec --scope @matron/schematics --scope matron -- npm run start",
+    "start": "lerna exec --scope @matron/schematics -- npm run start",
     "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build",
     "publish": "npm run build && lerna publish"
   },

@@ -21,17 +21,17 @@
   "scripts": {
     "build": "tsc",
     "prod": "npm run build && node ./dist/bin/matron.js",
-    "server": "nodemon ./bin/matron.ts",
-    "start": "cross-env NODE_ENV=developement ts-node ./bin/matron.ts"
+    "command": "ts-node ./bin/matron.ts",
+    "start": "cross-env NODE_ENV=developement nodemon ./bin/matron.ts"
   },
   "dependencies": {
+    "@angular-devkit/schematics-cli": "^0.11.2",
     "@matron/schematics": "^0.8.1",
     "chalk": "^2.4.1",
     "cross-spawn": "^6.0.5",
     "yargs": "^12.0.5"
   },
   "devDependencies": {
-    "@angular-devkit/schematics-cli": "^0.11.2",
     "@types/cross-spawn": "^6.0.0",
     "@types/node": "^10.12.11",
     "@types/yargs": "^12.0.5",

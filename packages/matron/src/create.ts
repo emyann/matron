@@ -3,6 +3,8 @@ import spawn from 'cross-spawn';
 import path from 'path';
 import { Bundler, TestFramework } from './typings';
 import { CommandModule } from 'yargs';
+import { SpawnSyncOptions } from 'child_process';
+import { existsSync } from 'fs';
 
 interface CreateOptions {
   name: string;
@@ -10,6 +12,7 @@ interface CreateOptions {
   test?: TestFramework;
   template?: string;
   skipInstall?: boolean;
+  dryRun?: boolean;
 }
 
 export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
@@ -38,6 +41,11 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
       describe: 'Skip npm dependencies installation',
       type: 'boolean',
       boolean: true
+    },
+    'dry-run': {
+      alias: '-d',
+      describe: 'Dry run',
+      boolean: true
     }
   },
   handler: args => {
@@ -47,7 +55,8 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
       bundler: args.bundler,
       test: args.test,
       template: args.template,
-      skipInstall: args.skipInstall
+      skipInstall: args.skipInstall ? true : false,
+      dryRun: args.dryRun ? true : false
     };
 
     create(options);
@@ -57,8 +66,13 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
 function create(options: CreateOptions) {
   const SCHEMATICS_MODULE = '@matron/schematics';
   const { name } = options;
-  const { bundler, template, test } = options;
+  const { bundler, template, test, dryRun, skipInstall } = options;
 
+  console.log(`${chalk.cyan('executeCmd--')} des `, options, path.dirname(__dirname));
+
+  const res = executeCmd('npm', ['bin'], { cwd: path.dirname(__dirname), stdio: 'pipe' });
+  const schematicsCliLocation = res.stdout.toString();
+  console.log('schematicsCliLocation', schematicsCliLocation);
   if (!name) {
     console.error('Please specify the project directory:');
     console.log(`  ${chalk.cyan('matron')} ${chalk.green('<project-name>')}`);
@@ -93,21 +107,25 @@ function create(options: CreateOptions) {
     const templateName = generateTemplateName(options);
     const command = 'npx';
     const args = [
-      '@angular-devkit/schematics-cli',
+      'schematics',
       `${SCHEMATICS_MODULE}:create`,
       '--name',
       name,
       '--template',
       templateName,
       '--provider',
-      'local'
+      'local',
+      '--dry-run',
+      dryRun ? 'true' : 'false'
     ];
 
-    spawn.sync(command, args, { stdio: 'inherit' });
+    spawn.sync(command, args, { stdio: 'inherit', cwd: path.dirname(__dirname) });
   }
+
   //TODO: exit when schematics issues an error
   const projectPath = path.resolve(process.cwd(), name);
-  if (!options.skipInstall) {
+
+  if (!(dryRun || skipInstall)) {
     npmInstall(projectPath);
   }
   printFinalMessage(projectPath);
@@ -122,12 +140,31 @@ function npmInstall(path: string) {
 }
 
 function printFinalMessage(projetPath: string) {
-  console.log(`Project successfully created at ${chalk.green(projetPath)}`);
-  console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
+  if (existsSync(projetPath)) {
+    console.log(`Project successfully created at ${chalk.green(projetPath)}`);
+    console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
+  }
 }
 function generateTemplateName({ bundler, test }: CreateOptions) {
   let templateName = 'typescript';
   if (bundler) templateName = templateName + `-${bundler}`;
   if (test) templateName = templateName + `-${test}`;
   return templateName;
+}
+
+function executeCmd(name: string, args?: string[], options?: SpawnSyncOptions) {
+  return executeTask({ command: name, args }, options);
+}
+
+interface Task {
+  command: string;
+  args?: string[];
+}
+export function executeTask(task: Task, options: SpawnSyncOptions = { stdio: 'inherit' }) {
+  const { stdio } = options;
+  // let { cwd } = options;
+  // if (!cwd) {
+  //   cwd = path.resolve(process.cwd());
+  // }
+  return spawn.sync(task.command, task.args, { stdio });
 }
