@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.8.3](https://github.com/emyann/matron/compare/v0.8.2...v0.8.3) (2019-01-07)
+
+
+### Bug Fixes
+
+* cleanup executeTask ([5966906](https://github.com/emyann/matron/commit/5966906))
+
+
+
+
+
 ## [0.8.2](https://github.com/emyann/matron/compare/v0.8.1...v0.8.2) (2019-01-07)
 
 
