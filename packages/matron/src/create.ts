@@ -160,11 +160,10 @@ interface Task {
   command: string;
   args?: string[];
 }
-export function executeTask(task: Task, options: SpawnSyncOptions = { stdio: 'inherit' }) {
-  const { stdio } = options;
-  // let { cwd } = options;
-  // if (!cwd) {
-  //   cwd = path.resolve(process.cwd());
-  // }
-  return spawn.sync(task.command, task.args, { stdio });
+export function executeTask(task: Task, options?: SpawnSyncOptions) {
+  const defaultOptions: SpawnSyncOptions = {
+    stdio: 'inherit'
+  };
+  const finalOptions = { ...defaultOptions, ...options };
+  return spawn.sync(task.command, task.args, finalOptions);
 }
