@@ -1,6 +1,6 @@
 {
   "name": "matron",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "CLI for Rapid Appplication Development with TypeScript",
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "keywords": [
