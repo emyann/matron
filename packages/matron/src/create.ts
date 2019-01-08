@@ -47,7 +47,7 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
       boolean: true
     },
     'dry-run': {
-      alias: '-d',
+      alias: 'd',
       describe: 'Dry run',
       boolean: true
     }
@@ -88,7 +88,6 @@ async function create(options: CreateOptions) {
   const projectPath = path.join(process.cwd(), normalizedName);
 
   const logger = createConsoleLogger(true, process.stdout, process.stderr);
-  console.log('here1');
   /** Create a Virtual FS Host scoped to where the process is being run. **/
   const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost(), normalize(process.cwd()));
 
@@ -149,7 +148,6 @@ async function create(options: CreateOptions) {
         logger: logger
       })
       .toPromise();
-    console.log('here2');
 
     if (nothingDone) {
       logger.info('Nothing to be done.');
