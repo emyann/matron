@@ -112,11 +112,9 @@ export interface AddSchema {
 export function add(options: AddSchema): Rule {
   return (host: Tree, context: SchematicContext) => {
     const { recipe: recipeId, projectPath = path.resolve(process.cwd()), projectName } = options;
-    // console.log('running add schematic with options', recipeId, options);
     const recipe = recipes[recipeId];
     if (recipe && recipe.tasks) {
       recipe.tasks.forEach(task => {
-        // console.log('executing task', task, projectPath);
         executeTask(task, { cwd: projectPath });
       });
     }

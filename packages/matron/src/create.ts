@@ -5,6 +5,10 @@ import { Bundler, TestFramework } from './typings';
 import { CommandModule } from 'yargs';
 import { SpawnSyncOptions } from 'child_process';
 import { existsSync } from 'fs';
+import { strings, normalize, virtualFs } from '@angular-devkit/core';
+import { NodeJsSyncHost, createConsoleLogger } from '@angular-devkit/core/node';
+import { NodeWorkflow } from '@angular-devkit/schematics/tools';
+import { DryRunEvent, UnsuccessfulWorkflowExecution } from '@angular-devkit/schematics';
 
 interface CreateOptions {
   name: string;
@@ -48,7 +52,7 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
       boolean: true
     }
   },
-  handler: args => {
+  handler: async args => {
     const options = {
       name: args.name,
       type: args.type,
@@ -59,20 +63,15 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
       dryRun: args.dryRun ? true : false
     };
 
-    create(options);
+    await create(options);
   }
 };
 
-function create(options: CreateOptions) {
+async function create(options: CreateOptions) {
   const SCHEMATICS_MODULE = '@matron/schematics';
   const { name } = options;
-  const { bundler, template, test, dryRun, skipInstall } = options;
+  const { dryRun, skipInstall } = options;
 
-  console.log(`${chalk.cyan('executeCmd--')} des `, options, path.dirname(__dirname));
-
-  const res = executeCmd('npm', ['bin'], { cwd: path.dirname(__dirname), stdio: 'pipe' });
-  const schematicsCliLocation = res.stdout.toString();
-  console.log('schematicsCliLocation', schematicsCliLocation);
   if (!name) {
     console.error('Please specify the project directory:');
     console.log(`  ${chalk.cyan('matron')} ${chalk.green('<project-name>')}`);
@@ -84,58 +83,101 @@ function create(options: CreateOptions) {
     process.exit(1);
   }
 
-  if (template && (bundler || test)) {
-    console.warn(
-      'You have specified a template along with a bundler, test or type option. Only the template flag will be used'
-    );
-    console.log(bundler, test);
-    const command = 'npx';
-    const args = [
-      '@angular-devkit/schematics-cli',
-      `${SCHEMATICS_MODULE}:create`,
-      '--name',
-      name,
-      '--template',
-      template,
-      '--provider',
-      'local'
-    ];
-    spawn.sync(command, args, { stdio: 'inherit' });
-    // console.log(template, res);
-  } else {
-    // Only Typscript is supported atm
-    const templateName = generateTemplateName(options);
-    const command = 'npx';
-    const args = [
-      'schematics',
-      `${SCHEMATICS_MODULE}:create`,
-      '--name',
-      name,
-      '--template',
-      templateName,
-      '--provider',
-      'local',
-      '--dry-run',
-      dryRun ? 'true' : 'false'
-    ];
+  const normalizedName = normalize('/' + strings.dasherize(name));
+  const projectName = normalizedName.split(path.sep).pop();
+  const projectPath = path.join(process.cwd(), normalizedName);
 
-    spawn.sync(command, args, { stdio: 'inherit', cwd: path.dirname(__dirname) });
+  const logger = createConsoleLogger(true, process.stdout, process.stderr);
+  console.log('here1');
+  /** Create a Virtual FS Host scoped to where the process is being run. **/
+  const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost(), normalize(process.cwd()));
+
+  /** Create the workflow that will be executed with this run. */
+  let loggingQueue: string[] = [];
+  let nothingDone = true;
+  let error = false;
+  const workflow = new NodeWorkflow(fsHost, { dryRun });
+  workflow.reporter.subscribe((event: DryRunEvent) => {
+    nothingDone = false;
+
+    switch (event.kind) {
+      case 'error':
+        error = true;
+
+        const desc = event.description == 'alreadyExist' ? 'already exists' : 'does not exist';
+        logger.warn(`ERROR! ${event.path} ${desc}.`);
+        break;
+      case 'update':
+        loggingQueue.push(`
+        ${chalk.white('UPDATE')} ${event.path} (${event.content.length} bytes)
+      `);
+        break;
+      case 'create':
+        loggingQueue.push(`${chalk.green('CREATE')} ${event.path} (${event.content.length} bytes)`);
+        break;
+      case 'delete':
+        loggingQueue.push(`${chalk.yellow('DELETE')} ${event.path}`);
+        break;
+      case 'rename':
+        loggingQueue.push(`${chalk.blue('RENAME')} ${event.path} => ${event.to}`);
+        break;
+    }
+  });
+  workflow.lifeCycle.subscribe(event => {
+    if (event.kind == 'workflow-end' || event.kind == 'post-tasks-start') {
+      if (!error) {
+        // Flush the log queue and clean the error state.
+        loggingQueue.forEach(log => logger.info(log));
+      }
+      loggingQueue = [];
+      error = false;
+    }
+  });
+
+  try {
+    await workflow
+      .execute({
+        collection: SCHEMATICS_MODULE,
+        schematic: 'create',
+        options: {
+          name: projectName ? projectName : name,
+          projectPath: normalizedName,
+          dryRun
+        },
+        // allowPrivate: allowPrivate,
+        debug: true,
+        logger: logger
+      })
+      .toPromise();
+    console.log('here2');
+
+    if (nothingDone) {
+      logger.info('Nothing to be done.');
+    }
+
+    if (!(dryRun || skipInstall)) {
+      npmInstall(projectPath);
+    }
+    printFinalMessage(projectPath);
+
+    return 0;
+  } catch (err) {
+    if (err instanceof UnsuccessfulWorkflowExecution) {
+      // "See above" because we already printed the error.
+      logger.fatal('The Schematic workflow failed. See above.');
+    } else {
+      logger.fatal(err.stack || err.message);
+    }
+
+    return 1;
   }
-
-  //TODO: exit when schematics issues an error
-  const projectPath = path.resolve(process.cwd(), name);
-
-  if (!(dryRun || skipInstall)) {
-    npmInstall(projectPath);
-  }
-  printFinalMessage(projectPath);
 }
 
 function npmInstall(path: string) {
   const command = 'npm';
   const args = ['install', '--save', '--save-exact', '--loglevel', 'error'];
 
-  console.log('installing NPM dependencies');
+  console.log('installing NPM dependencies in ', path);
   spawn.sync(command, args, { stdio: 'inherit', cwd: path });
 }
 
@@ -145,12 +187,13 @@ function printFinalMessage(projetPath: string) {
     console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
   }
 }
-function generateTemplateName({ bundler, test }: CreateOptions) {
-  let templateName = 'typescript';
-  if (bundler) templateName = templateName + `-${bundler}`;
-  if (test) templateName = templateName + `-${test}`;
-  return templateName;
-}
+
+// function generateTemplateName({ bundler, test }: CreateOptions) {
+//   let templateName = 'typescript';
+//   if (bundler) templateName = templateName + `-${bundler}`;
+//   if (test) templateName = templateName + `-${test}`;
+//   return templateName;
+// }
 
 function executeCmd(name: string, args?: string[], options?: SpawnSyncOptions) {
   return executeTask({ command: name, args }, options);

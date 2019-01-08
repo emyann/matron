@@ -7,18 +7,8 @@ import chalk from 'chalk';
 
 const usage = `
 Usage
-  ${chalk.bgYellow(chalk.black('Using flags'))}
-    ${'matron'} create --type ${chalk.green('typescript')} --bundler ${chalk.yellow('webpack')} --test ${chalk.magenta(
-  'jest'
-)}
-
-  ${chalk.bgYellow(chalk.black('Using a naming convention'))}
-    ${'matron'} create --template ${chalk.green('[TYPE]')}-${chalk.yellow('[BUNDLER]')}-${chalk.magenta(
-  '[TESTFRAMEWORK]'
-)}
-    ${'matron'} create --template ${chalk.green('typescript')}-${chalk.yellow('parcel')}-${chalk.magenta(
-  'karma-jasmine'
-)}
+  ${chalk.green('matron')} create typescript-project
+  ${chalk.green('matron')} create dry-run-example --dry-run
   `;
 
 yargs.usage(usage);

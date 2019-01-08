@@ -11,14 +11,6 @@
       "$default": {
         "$source": "projectName"
       }
-    },
-    "template": {
-      "type": "string",
-      "description": "Project template"
-    },
-    "skipInstall": {
-      "type": "boolean",
-      "description": "Skip npm dependencies installation"
     }
   },
   "required": ["name"]
