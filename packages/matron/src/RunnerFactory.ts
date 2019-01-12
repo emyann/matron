@@ -3,13 +3,15 @@ import { virtualFs, normalize } from '@angular-devkit/core';
 import { NodeWorkflow } from '@angular-devkit/schematics/tools';
 import { DryRunEvent } from '@angular-devkit/schematics';
 import chalk from 'chalk';
+import { SCHEMATICS_MODULE } from './constants';
+import * as mat from '@matron/schematics';
 
 interface RunnerOptions {
   dryRun?: boolean;
   path?: string;
 }
 
-export function RunnerFactory(options: RunnerOptions) {
+function WorkflowFactory(options: RunnerOptions) {
   const { dryRun, path = process.cwd() } = options;
 
   const logger = createConsoleLogger(true, process.stdout, process.stderr);
@@ -55,4 +57,27 @@ export function RunnerFactory(options: RunnerOptions) {
   });
 
   return workflow;
+}
+
+export class Runner {
+  workflow: NodeWorkflow;
+  constructor(options: RunnerOptions) {
+    this.workflow = WorkflowFactory(options);
+  }
+  async create(options: any) {
+    return this.execute('create', options);
+  }
+  async add(options: AddSchema) {
+    return this.execute('add', options);
+  }
+
+  private execute(command: 'add' | 'create', options: any) {
+    return this.workflow
+      .execute({
+        collection: SCHEMATICS_MODULE,
+        schematic: command,
+        options
+      })
+      .toPromise();
+  }
 }

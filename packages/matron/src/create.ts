@@ -1,13 +1,11 @@
 import chalk from 'chalk';
-import spawn from 'cross-spawn';
 import path from 'path';
 import { Bundler, TestFramework } from './typings';
 import { CommandModule } from 'yargs';
-import { SpawnSyncOptions } from 'child_process';
-import { existsSync } from 'fs';
 import { strings, normalize } from '@angular-devkit/core';
 import { UnsuccessfulWorkflowExecution } from '@angular-devkit/schematics';
-import { RunnerFactory } from './RunnerFactory';
+import { Runner } from './RunnerFactory';
+import { npmInstall, printFinalMessage } from './helpers';
 
 interface CreateOptions {
   name: string;
@@ -67,7 +65,6 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
 };
 
 async function create(options: CreateOptions) {
-  const SCHEMATICS_MODULE = '@matron/schematics';
   const { name } = options;
   const { dryRun, skipInstall } = options;
 
@@ -87,18 +84,22 @@ async function create(options: CreateOptions) {
   const projectPath = path.join(process.cwd(), normalizedName);
 
   try {
-    const runner = RunnerFactory({ dryRun });
-    await runner
-      .execute({
-        collection: SCHEMATICS_MODULE,
-        schematic: 'create',
-        options: {
-          name: projectName ? projectName : name,
-          projectPath: normalizedName,
-          dryRun
-        }
-      })
-      .toPromise();
+    const runner = new Runner({ dryRun });
+    await runner.create({
+      name: projectName ? projectName : name,
+      projectPath: normalizedName,
+      dryRun
+    });
+    // .execute({
+    //   collection: SCHEMATICS_MODULE,
+    //   schematic: 'create',
+    //   options: {
+    //     name: projectName ? projectName : name,
+    //     projectPath: normalizedName,
+    //     dryRun
+    //   }
+    // })
+    // .toPromise();
 
     if (!(dryRun || skipInstall)) {
       npmInstall(projectPath);
@@ -117,31 +118,4 @@ async function create(options: CreateOptions) {
 
     return 1;
   }
-}
-
-function npmInstall(path: string) {
-  const command = 'npm';
-  const args = ['install', '--save', '--save-exact', '--loglevel', 'error'];
-
-  console.log('installing NPM dependencies in ', path);
-  spawn.sync(command, args, { stdio: 'inherit', cwd: path });
-}
-
-function printFinalMessage(projetPath: string) {
-  if (existsSync(projetPath)) {
-    console.log(`Project successfully created at ${chalk.green(projetPath)}`);
-    console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
-  }
-}
-
-interface Task {
-  command: string;
-  args?: string[];
-}
-export function executeTask(task: Task, options?: SpawnSyncOptions) {
-  const defaultOptions: SpawnSyncOptions = {
-    stdio: 'inherit'
-  };
-  const finalOptions = { ...defaultOptions, ...options };
-  return spawn.sync(task.command, task.args, finalOptions);
 }
