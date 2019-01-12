@@ -5,10 +5,9 @@ import { Bundler, TestFramework } from './typings';
 import { CommandModule } from 'yargs';
 import { SpawnSyncOptions } from 'child_process';
 import { existsSync } from 'fs';
-import { strings, normalize, virtualFs } from '@angular-devkit/core';
-import { NodeJsSyncHost, createConsoleLogger } from '@angular-devkit/core/node';
-import { NodeWorkflow } from '@angular-devkit/schematics/tools';
-import { DryRunEvent, UnsuccessfulWorkflowExecution } from '@angular-devkit/schematics';
+import { strings, normalize } from '@angular-devkit/core';
+import { UnsuccessfulWorkflowExecution } from '@angular-devkit/schematics';
+import { RunnerFactory } from './RunnerFactory';
 
 interface CreateOptions {
   name: string;
@@ -87,54 +86,9 @@ async function create(options: CreateOptions) {
   const projectName = normalizedName.split(path.sep).pop();
   const projectPath = path.join(process.cwd(), normalizedName);
 
-  const logger = createConsoleLogger(true, process.stdout, process.stderr);
-  /** Create a Virtual FS Host scoped to where the process is being run. **/
-  const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost(), normalize(process.cwd()));
-
-  /** Create the workflow that will be executed with this run. */
-  let loggingQueue: string[] = [];
-  let nothingDone = true;
-  let error = false;
-  const workflow = new NodeWorkflow(fsHost, { dryRun });
-  workflow.reporter.subscribe((event: DryRunEvent) => {
-    nothingDone = false;
-
-    switch (event.kind) {
-      case 'error':
-        error = true;
-
-        const desc = event.description == 'alreadyExist' ? 'already exists' : 'does not exist';
-        logger.warn(`ERROR! ${event.path} ${desc}.`);
-        break;
-      case 'update':
-        loggingQueue.push(`
-        ${chalk.white('UPDATE')} ${event.path} (${event.content.length} bytes)
-      `);
-        break;
-      case 'create':
-        loggingQueue.push(`${chalk.green('CREATE')} ${event.path} (${event.content.length} bytes)`);
-        break;
-      case 'delete':
-        loggingQueue.push(`${chalk.yellow('DELETE')} ${event.path}`);
-        break;
-      case 'rename':
-        loggingQueue.push(`${chalk.blue('RENAME')} ${event.path} => ${event.to}`);
-        break;
-    }
-  });
-  workflow.lifeCycle.subscribe(event => {
-    if (event.kind == 'workflow-end' || event.kind == 'post-tasks-start') {
-      if (!error) {
-        // Flush the log queue and clean the error state.
-        loggingQueue.forEach(log => logger.info(log));
-      }
-      loggingQueue = [];
-      error = false;
-    }
-  });
-
   try {
-    await workflow
+    const runner = RunnerFactory({ dryRun });
+    await runner
       .execute({
         collection: SCHEMATICS_MODULE,
         schematic: 'create',
@@ -142,16 +96,9 @@ async function create(options: CreateOptions) {
           name: projectName ? projectName : name,
           projectPath: normalizedName,
           dryRun
-        },
-        // allowPrivate: allowPrivate,
-        debug: true,
-        logger: logger
+        }
       })
       .toPromise();
-
-    if (nothingDone) {
-      logger.info('Nothing to be done.');
-    }
 
     if (!(dryRun || skipInstall)) {
       npmInstall(projectPath);
@@ -161,10 +108,11 @@ async function create(options: CreateOptions) {
     return 0;
   } catch (err) {
     if (err instanceof UnsuccessfulWorkflowExecution) {
+      console.error('The Schematic workflow failed. See above.');
       // "See above" because we already printed the error.
-      logger.fatal('The Schematic workflow failed. See above.');
+      // logger.fatal('The Schematic workflow failed. See above.');
     } else {
-      logger.fatal(err.stack || err.message);
+      // logger.fatal(err.stack || err.message);
     }
 
     return 1;
@@ -184,17 +132,6 @@ function printFinalMessage(projetPath: string) {
     console.log(`Project successfully created at ${chalk.green(projetPath)}`);
     console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
   }
-}
-
-// function generateTemplateName({ bundler, test }: CreateOptions) {
-//   let templateName = 'typescript';
-//   if (bundler) templateName = templateName + `-${bundler}`;
-//   if (test) templateName = templateName + `-${test}`;
-//   return templateName;
-// }
-
-function executeCmd(name: string, args?: string[], options?: SpawnSyncOptions) {
-  return executeTask({ command: name, args }, options);
 }
 
 interface Task {

@@ -25,7 +25,8 @@
     "start": "cross-env NODE_ENV=developement nodemon ./bin/matron.ts"
   },
   "dependencies": {
-    "@angular-devkit/core": "^7.1.0",
+    "@angular-devkit/core": "^7.2.1",
+    "@angular-devkit/schematics": "^7.2.1",
     "@matron/schematics": "^0.8.4",
     "chalk": "^2.4.1",
     "cross-spawn": "^6.0.5",
@@ -38,6 +39,6 @@
     "cross-env": "^5.2.0",
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",
-    "typescript": "^3.1.1"
+    "typescript": "^3.2.2"
   }
 }

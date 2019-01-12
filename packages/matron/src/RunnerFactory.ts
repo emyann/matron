@@ -1,0 +1,58 @@
+import { createConsoleLogger, NodeJsSyncHost } from '@angular-devkit/core/node';
+import { virtualFs, normalize } from '@angular-devkit/core';
+import { NodeWorkflow } from '@angular-devkit/schematics/tools';
+import { DryRunEvent } from '@angular-devkit/schematics';
+import chalk from 'chalk';
+
+interface RunnerOptions {
+  dryRun?: boolean;
+  path?: string;
+}
+
+export function RunnerFactory(options: RunnerOptions) {
+  const { dryRun, path = process.cwd() } = options;
+
+  const logger = createConsoleLogger(true, process.stdout, process.stderr);
+  const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost(), normalize(path));
+
+  /** Create the workflow that will be executed with this run. */
+  let loggingQueue: string[] = [];
+  let error = false;
+  const workflow = new NodeWorkflow(fsHost, { dryRun });
+  workflow.reporter.subscribe((event: DryRunEvent) => {
+    switch (event.kind) {
+      case 'error':
+        error = true;
+
+        const desc = event.description == 'alreadyExist' ? 'already exists' : 'does not exist';
+        logger.warn(`ERROR! ${event.path} ${desc}.`);
+        break;
+      case 'update':
+        loggingQueue.push(`
+      ${chalk.white('UPDATE')} ${event.path} (${event.content.length} bytes)
+    `);
+        break;
+      case 'create':
+        loggingQueue.push(`${chalk.green('CREATE')} ${event.path} (${event.content.length} bytes)`);
+        break;
+      case 'delete':
+        loggingQueue.push(`${chalk.yellow('DELETE')} ${event.path}`);
+        break;
+      case 'rename':
+        loggingQueue.push(`${chalk.blue('RENAME')} ${event.path} => ${event.to}`);
+        break;
+    }
+  });
+  workflow.lifeCycle.subscribe((event: any) => {
+    if (event.kind == 'workflow-end' || event.kind == 'post-tasks-start') {
+      if (!error) {
+        // Flush the log queue and clean the error state.
+        loggingQueue.forEach(log => logger.info(log));
+      }
+      loggingQueue = [];
+      error = false;
+    }
+  });
+
+  return workflow;
+}
