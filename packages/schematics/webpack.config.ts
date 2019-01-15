@@ -13,7 +13,6 @@ const entries = files.reduce((acc, file) => {
   acc[filePath] = file;
   return acc;
 }, {});
-console.log('glob files', files);
 
 const config: webpack.Configuration = {
   target: 'node',

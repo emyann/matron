@@ -10,6 +10,11 @@
       "description": "Create",
       "factory": "./collection/add/index#add",
       "schema": "./collection/add/schema.json"
+    },
+    "snapshot": {
+      "description": "Snapshot",
+      "factory": "./collection/snapshot/snapshot.schematic#snapshot",
+      "schema": "./collection/snapshot/schema.json"
     }
   }
 }
