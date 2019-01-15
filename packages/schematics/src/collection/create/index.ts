@@ -1,7 +1,7 @@
 import { Rule, SchematicContext, Tree, chain, schematic } from '@angular-devkit/schematics';
 import { AddSchema } from '../add';
 
-interface CreateSchema {
+export interface CreateSchema {
   name: string;
   projectPath: string;
 }
