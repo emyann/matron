@@ -15,6 +15,7 @@ import path from 'path';
 import spawn from 'cross-spawn';
 import { updateJsonInTree, serializeJson } from '../../helpers/ast-utils';
 import { SpawnSyncOptions } from 'child_process';
+import { normalize } from '@angular-devkit/core';
 
 interface Recipe {
   tasks?: Task[];
@@ -110,8 +111,12 @@ export interface AddSchema {
   projectName: string;
 }
 export function add(options: AddSchema): Rule {
+  // console.log('run add schematics', options);
+  const { recipe: recipeId, projectPath = path.resolve(process.cwd()) } = options;
+  const normalizedName = normalize(process.cwd());
+  const projectName = normalizedName.split(path.sep).pop() as string;
+
   return (host: Tree, context: SchematicContext) => {
-    const { recipe: recipeId, projectPath = path.resolve(process.cwd()), projectName } = options;
     const recipe = recipes[recipeId];
     if (recipe && recipe.tasks) {
       recipe.tasks.forEach(task => {
