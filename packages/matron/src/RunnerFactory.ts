@@ -4,7 +4,7 @@ import { NodeWorkflow } from '@angular-devkit/schematics/tools';
 import { DryRunEvent } from '@angular-devkit/schematics';
 import chalk from 'chalk';
 import { SCHEMATICS_MODULE } from './constants';
-import * as mat from '@matron/schematics';
+import { AddSchema, CreateSchema } from '@matron/schematics';
 
 interface RunnerOptions {
   dryRun?: boolean;
@@ -64,7 +64,7 @@ export class Runner {
   constructor(options: RunnerOptions) {
     this.workflow = WorkflowFactory(options);
   }
-  async create(options: any) {
+  async create(options: CreateSchema) {
     return this.execute('create', options);
   }
   async add(options: AddSchema) {

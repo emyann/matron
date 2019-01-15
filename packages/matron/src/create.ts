@@ -87,19 +87,8 @@ async function create(options: CreateOptions) {
     const runner = new Runner({ dryRun });
     await runner.create({
       name: projectName ? projectName : name,
-      projectPath: normalizedName,
-      dryRun
+      projectPath: normalizedName
     });
-    // .execute({
-    //   collection: SCHEMATICS_MODULE,
-    //   schematic: 'create',
-    //   options: {
-    //     name: projectName ? projectName : name,
-    //     projectPath: normalizedName,
-    //     dryRun
-    //   }
-    // })
-    // .toPromise();
 
     if (!(dryRun || skipInstall)) {
       npmInstall(projectPath);
