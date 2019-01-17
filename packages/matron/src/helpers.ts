@@ -2,6 +2,7 @@ import spawn from 'cross-spawn';
 import { SpawnSyncOptions } from 'child_process';
 import { existsSync } from 'fs';
 import chalk from 'chalk';
+import path from 'path';
 
 export function npmInstall(path: string) {
   const command = 'npm';
@@ -17,15 +18,15 @@ export function printFinalMessage(projetPath: string) {
     console.log(`Try ${chalk.yellow('npm start')} in the project folder`);
   }
 }
-
 interface Task {
   command: string;
   args?: string[];
 }
-export function executeTask(task: Task, options?: SpawnSyncOptions) {
-  const defaultOptions: SpawnSyncOptions = {
-    stdio: 'inherit'
-  };
-  const finalOptions = { ...defaultOptions, ...options };
-  return spawn.sync(task.command, task.args, finalOptions);
+export function executeTask(task: Task, options: SpawnSyncOptions = { stdio: 'inherit' }) {
+  const { stdio } = options;
+  let { cwd } = options;
+  if (!cwd) {
+    cwd = path.resolve(process.cwd());
+  }
+  return spawn.sync(task.command, task.args, { stdio, cwd });
 }

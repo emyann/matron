@@ -6,6 +6,7 @@ import { strings, normalize } from '@angular-devkit/core';
 import { UnsuccessfulWorkflowExecution } from '@angular-devkit/schematics';
 import { Runner } from './RunnerFactory';
 import { npmInstall, printFinalMessage } from './helpers';
+import { githubClient } from './templates/templates.list';
 
 interface CreateOptions {
   name: string;
@@ -27,13 +28,13 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
       choices: [Bundler.Parcel, Bundler.Webpack]
     },
     test: {
-      alias: 't',
+      alias: 'ut',
       describe: 'Set a test framework',
       type: 'string',
       choices: [TestFramework.Jest, TestFramework.KarmaJasmine]
     },
     template: {
-      alias: 'p',
+      alias: 't',
       describe: 'Set a template',
       type: 'string'
     },
@@ -64,30 +65,39 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
   }
 };
 
+const getTemplateLocation = (templateName: string) => `templates/src/${templateName}`;
+
+const isDev = process.env.NODE_ENV === 'development';
 async function create(options: CreateOptions) {
   const { name } = options;
-  const { dryRun, skipInstall } = options;
-
-  if (!name) {
-    console.error('Please specify the project directory:');
-    console.log(`  ${chalk.cyan('matron')} ${chalk.green('<project-name>')}`);
-    console.log();
-    console.log('For example:');
-    console.log(`  ${chalk.cyan('matron')} ${chalk.green('my-typescript-lib')}`);
-    console.log();
-    console.log(`Run ${chalk.cyan(`${'matron'} --help`)} to see all options.`);
-    process.exit(1);
-  }
+  const { dryRun, skipInstall, template } = options;
 
   const normalizedName = normalize('/' + strings.dasherize(name));
   const projectName = normalizedName.split(path.sep).pop();
   const projectPath = path.join(process.cwd(), normalizedName);
 
+  const templateName = template ? template : 'hello-world';
+  let templatePath = '';
+  if (isDev) {
+    templatePath = path.resolve(
+      __dirname,
+      '../../node_modules/@matron/schematics/node_modules/@matron/',
+      getTemplateLocation(templateName)
+    );
+  } else {
+    const templateCacheDir = path.resolve(__dirname, '../../cache/templates/src');
+    await githubClient().downloadTemplate(templateName, templateCacheDir);
+    templatePath = path.resolve(__dirname, '../../cache', getTemplateLocation(templateName));
+  }
+
+  console.log('templatePath', templatePath);
+
   try {
     const runner = new Runner({ dryRun });
     await runner.create({
       name: projectName ? projectName : name,
-      projectPath: normalizedName
+      projectPath: normalizedName,
+      templatePath
     });
 
     if (!(dryRun || skipInstall)) {

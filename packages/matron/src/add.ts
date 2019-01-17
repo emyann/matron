@@ -49,7 +49,6 @@ async function add(options: AddOptions) {
 
   const normalizedName = normalize(process.cwd());
   const projectName = normalizedName.split(path.sep).pop() as string;
-  // const projectPath = path.join(process.cwd(), normalizedName);
 
   try {
     const runner = new Runner({ dryRun, path: executionPath });
@@ -63,16 +62,4 @@ async function add(options: AddOptions) {
       // logger.fatal(err.stack || err.message);
     }
   }
-}
-
-interface Task {
-  command: string;
-  args?: string[];
-}
-
-export function executeTask(task: Task, directoryPath?: string) {
-  if (!directoryPath) {
-    directoryPath = path.resolve(process.cwd());
-  }
-  spawn.sync(task.command, task.args, { stdio: 'inherit', cwd: directoryPath });
 }

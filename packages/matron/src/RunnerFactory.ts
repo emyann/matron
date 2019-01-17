@@ -63,6 +63,9 @@ export class Runner {
   workflow: NodeWorkflow;
   constructor(options: RunnerOptions) {
     this.workflow = WorkflowFactory(options);
+    if (options.dryRun) {
+      console.log('Dry Run Mode');
+    }
   }
   async create(options: CreateSchema) {
     return this.execute('create', options);

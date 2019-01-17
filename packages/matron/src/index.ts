@@ -3,6 +3,7 @@ import { createCommand } from './create';
 import { addCommand } from './add';
 import chalk from 'chalk';
 import { snapshot } from './snapshot/snapshot';
+import { templates } from './templates/templates.list';
 
 const usage = `
 Usage
@@ -14,5 +15,6 @@ yargs.usage(usage);
 yargs.command(createCommand);
 yargs.command(addCommand);
 yargs.command(snapshot);
+yargs.command(templates);
 
 yargs.help().wrap(110).argv;
