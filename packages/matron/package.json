@@ -1,6 +1,6 @@
 {
   "name": "matron",
-  "version": "0.8.5",
+  "version": "0.9.0",
   "description": "CLI for Rapid Appplication Development with TypeScript",
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "keywords": [
@@ -27,11 +27,11 @@
   "dependencies": {
     "@angular-devkit/core": "^7.2.1",
     "@angular-devkit/schematics": "^7.2.1",
-    "@matron/schematics": "^0.8.4",
+    "@matron/schematics": "^0.9.0",
+    "@octokit/rest": "^16.9.0",
     "chalk": "^2.4.1",
     "cross-spawn": "^6.0.5",
-    "yargs": "^12.0.5",
-    "@octokit/rest": "^16.9.0"
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.0",
