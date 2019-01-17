@@ -24,11 +24,16 @@
   "dependencies": {
     "@angular-devkit/core": "^7.1.0",
     "@angular-devkit/schematics": "^7.1.0",
-    "cross-spawn": "^6.0.5"
+    "chance": "^1.0.18",
+    "cross-spawn": "^6.0.5",
+    "minimatch": "^3.0.4",
+    "ora": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-typescript": "^7.1.0",
+    "@matron/templates": "^0.8.5",
+    "@types/chance": "^1.0.1",
     "@types/copy-webpack-plugin": "^4.4.2",
     "@types/cross-spawn": "^6.0.0",
     "@types/glob": "^7.1.1",

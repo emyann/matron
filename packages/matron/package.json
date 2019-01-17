@@ -30,7 +30,8 @@
     "@matron/schematics": "^0.8.4",
     "chalk": "^2.4.1",
     "cross-spawn": "^6.0.5",
-    "yargs": "^12.0.5"
+    "yargs": "^12.0.5",
+    "@octokit/rest": "^16.9.0"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.0",
