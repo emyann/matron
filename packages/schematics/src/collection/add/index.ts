@@ -7,15 +7,13 @@ import {
   mergeWith,
   url,
   move,
-  apply,
-  template
+  apply
 } from '@angular-devkit/schematics';
 
 import path from 'path';
 import spawn from 'cross-spawn';
 import { updateJsonInTree, serializeJson } from '../../helpers/ast-utils';
 import { SpawnSyncOptions } from 'child_process';
-import { normalize } from '@angular-devkit/core';
 
 interface Recipe {
   tasks?: Task[];
@@ -61,9 +59,10 @@ const recipes: RecipeRegistry = {
             include: ['src/**/*']
           })
         ),
-      ({ projectPath }) =>
+      ({ projectPath, projectName }) =>
         updatePackageJson(
           {
+            name: projectName,
             main: 'src/index.ts',
             scripts: { start: 'nodemon src/index.ts', build: 'tsc' },
             devDependencies: getDependenciesLatestVersion('cross-env', 'nodemon', 'ts-node', 'typescript')
@@ -89,19 +88,6 @@ const recipes: RecipeRegistry = {
       { command: 'node_modules/.bin/ts-jest', args: ['config:init'] }
     ],
     rules: [() => updatePackageJson({ scripts: { test: 'jest' } })]
-  },
-  parcel: {
-    tasks: [{ command: 'npm', args: ['install', '--save-dev', 'parcel-bundler', 'typescript'] }],
-    rules: [
-      () =>
-        updatePackageJson({
-          scripts: {
-            start: 'parcel serve src/index.html',
-            build: 'cross-env NODE_ENV=production parcel build src/index.html --public-url .'
-          }
-        }),
-      () => addIndexHtml()
-    ]
   }
 };
 
@@ -111,11 +97,7 @@ export interface AddSchema {
   projectName: string;
 }
 export function add(options: AddSchema): Rule {
-  // console.log('run add schematics', options);
   const { recipe: recipeId, projectPath = path.resolve(process.cwd()) } = options;
-  const normalizedName = normalize(process.cwd());
-  const projectName = normalizedName.split(path.sep).pop() as string;
-
   return (host: Tree, context: SchematicContext) => {
     const recipe = recipes[recipeId];
     if (recipe && recipe.tasks) {
@@ -124,12 +106,8 @@ export function add(options: AddSchema): Rule {
       });
     }
 
-    const templateSource = apply(url('./files/typescript'), [
-      template({
-        jsonPackage: { name: projectName }
-      }),
-      move(projectPath)
-    ]);
+    console.log(' path.resolve()', path.resolve('../../../node_modules/@matron/templates/src/hello-world'));
+    const templateSource = apply(url('../../../node_modules/@matron/templates/src/hello-world'), [move(projectPath)]);
 
     let rules: Rule[] = [branchAndMerge(chain([mergeWith(templateSource)]))];
     if (recipe.rules) {
@@ -145,26 +123,6 @@ export function add(options: AddSchema): Rule {
 function addFile(path: string, content: string): Rule {
   return (host: Tree, _context: SchematicContext) => {
     host.create(path, content);
-    return host;
-  };
-}
-
-function addIndexHtml(): Rule {
-  return (host: Tree, _context: SchematicContext) => {
-    const html = `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>parcel app</title>
-    </head>
-    <body>  
-    <div id="js-main" class="main">
-    
-    </div>
-    <script src="./index.ts"></script>
-    </body>
-    </html>`;
-    host.create('./src/index.html', html);
     return host;
   };
 }
