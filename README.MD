@@ -2,6 +2,28 @@
 
 A comprehensive CLI for Rapid Application Development with TypeScript and more.
 
+- [`Matron`](#matron)
+  - [Getting Started](#getting-started)
+  - [Commands](#commands)
+    - [`matron create`](#matron-create)
+      - [Usage](#usage)
+      - [Arguments](#arguments)
+        - [`name`](#name)
+      - [Options](#options)
+        - [`--template`, `-t`](#template--t)
+        - [`--skip-install`, `-s`](#skip-install--s)
+        - [`--dry-run`, `-d`](#dry-run--d)
+    - [`matron snapshot`](#matron-snapshot)
+      - [Usage](#usage-1)
+      - [Arguments](#arguments-1)
+        - [`path`](#path)
+        - [`destination`](#destination)
+      - [Options](#options-1)
+        - [`--ignore`, `-i`](#ignore--i)
+        - [`--dry-run`, `-d`](#dry-run--d-1)
+    - [`matron templates list`](#matron-templates-list)
+      - [Usage](#usage-2)
+
 ## Getting Started
 
 **Immediately with `npx`**
@@ -31,7 +53,7 @@ matron create <name> [--template] [--dry-run] [--skip-install]
 
 #### Arguments
 
-#### `name`
+##### `name`
 
 Name or path of the project (e.g `matron create path/to/my/project`)
 
@@ -78,11 +100,11 @@ matron snapshot [path] [destination] [--ignore] [--dry-run]
 
 #### Arguments
 
-#### `path`
+##### `path`
 
 Directory to snapshot.
 
-#### `destination`
+##### `destination`
 
 Destination directory where to store the snapshot.
 
