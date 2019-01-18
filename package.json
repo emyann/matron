@@ -2,11 +2,11 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "npx lerna bootstrap",
+    "bootstrap": "lerna bootstrap",
     "prestart": "npm run bootstrap",
-    "start": "npx lerna exec --scope @matron/schematics -- npm run start",
-    "build": "npx lerna exec --scope @matron/schematics --scope matron -- npm run build",
-    "publish": "npm run build && npx lerna publish"
+    "start": "lerna exec --scope @matron/schematics -- npm run start",
+    "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build",
+    "publish": "npm run build && lerna publish"
   },
   "devDependencies": {
     "lerna": "^3.6.0"
