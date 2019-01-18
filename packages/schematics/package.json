@@ -18,7 +18,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=developement npm run build -- -w",
     "build": "npx tsc & npm run webpack -- --display-error-details",
-    "webpack": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack",
+    "webpack": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" npx webpack",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "dependencies": {
