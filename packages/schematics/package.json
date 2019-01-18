@@ -17,7 +17,7 @@
   "schematics": "./dist/collection.json",
   "scripts": {
     "start": "cross-env NODE_ENV=developement npm run build -- -w",
-    "build": "tsc & npm run webpack -- --display-error-details",
+    "build": "npx tsc & npm run webpack -- --display-error-details",
     "webpack": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
