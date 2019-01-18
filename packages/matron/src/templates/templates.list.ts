@@ -94,7 +94,6 @@ export function githubClient() {
 
 function ensureDirectory(directoryPath: string) {
   if (existsSync(directoryPath)) return;
-  console.log(`creating directory ${directoryPath}`);
   return executeTask({ command: 'mkdir', args: ['-p', directoryPath] }, { stdio: [process.stdout] });
 }
 

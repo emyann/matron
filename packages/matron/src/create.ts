@@ -1,6 +1,4 @@
-import chalk from 'chalk';
 import path from 'path';
-import { Bundler, TestFramework } from './typings';
 import { CommandModule } from 'yargs';
 import { strings, normalize } from '@angular-devkit/core';
 import { UnsuccessfulWorkflowExecution } from '@angular-devkit/schematics';
@@ -10,8 +8,6 @@ import { githubClient } from './templates/templates.list';
 
 interface CreateOptions {
   name: string;
-  bundler?: Bundler;
-  test?: TestFramework;
   template?: string;
   skipInstall?: boolean;
   dryRun?: boolean;
@@ -21,18 +17,6 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
   command: 'create <name>',
   describe: 'Start a Typescript Project',
   builder: {
-    bundler: {
-      alias: 'b',
-      describe: 'Set a project bundler',
-      type: 'string',
-      choices: [Bundler.Parcel, Bundler.Webpack]
-    },
-    test: {
-      alias: 'ut',
-      describe: 'Set a test framework',
-      type: 'string',
-      choices: [TestFramework.Jest, TestFramework.KarmaJasmine]
-    },
     template: {
       alias: 't',
       describe: 'Set a template',
@@ -53,8 +37,6 @@ export const createCommand: CommandModule<CreateOptions, CreateOptions> = {
   handler: async args => {
     const options = {
       name: args.name,
-      type: args.type,
-      bundler: args.bundler,
       test: args.test,
       template: args.template,
       skipInstall: args.skipInstall ? true : false,
@@ -90,7 +72,7 @@ async function create(options: CreateOptions) {
     templatePath = path.resolve(__dirname, '../../cache', getTemplateLocation(templateName));
   }
 
-  console.log('templatePath', templatePath);
+  // console.log('templatePath', templatePath);
 
   try {
     const runner = new Runner({ dryRun });

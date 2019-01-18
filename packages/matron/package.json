@@ -1,8 +1,10 @@
 {
   "name": "matron",
   "version": "0.9.0",
-  "description": "CLI for Rapid Appplication Development with TypeScript",
+  "description": "CLI for Rapid Application Development with TypeScript and more",
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
+  "repository": "emyann/matron",
+  "homepage": "https://github.com/emyann/matron/tree/master/packages/matron#readme",
   "keywords": [
     "Typescript",
     "Webpack",
