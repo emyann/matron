@@ -38,7 +38,7 @@ jobs:
           command: npm run bootstrap
       - run:
           name: Publish to NPM
-          command: npm run deploy:staging"
+          command: npm run publish
 
 workflows:
   version: 2
