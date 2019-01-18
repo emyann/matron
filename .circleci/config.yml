@@ -29,9 +29,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
-          name: Lerna bootstrap
-          command: npm run bootstrap
-      - run:
           name: Build
           command: npm run build
 
