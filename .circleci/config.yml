@@ -37,6 +37,9 @@ jobs:
           name: Lerna bootstrap
           command: npm run bootstrap
       - run:
+          name: NPMRC
+          command: echo "registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+      - run:
           name: Publish to NPM
           command: npm run publish
 
