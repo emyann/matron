@@ -1,0 +1,29 @@
+{
+  "name": "matron",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "npm run build:types && npm run build:js",
+    "start": "concurrently --kill-others \"npm run build:js -- -w --display \"errors-only\"\" \"nodemon \"dist/index.js\"\"",
+    "build:js": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --mode=production",
+    "build:types": "tsc --emitDeclarationOnly",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/node": "^10.12.18",
+    "@types/webpack": "^4.4.22",
+    "babel-loader": "^8.0.5",
+    "concurrently": "^4.1.0",
+    "fork-ts-checker-webpack-plugin": "^0.5.2",
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.2",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1"
+  }
+}
