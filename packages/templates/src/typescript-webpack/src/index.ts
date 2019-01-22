@@ -1,5 +1,5 @@
 export function main() {
-  console.log('Hello World!18');
+  console.log('Hello world');
 }
 
 main();
