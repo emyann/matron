@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/emyann/matron/compare/v0.10.0...v0.11.0) (2019-01-22)
+
+
+### Bug Fixes
+
+* add npmrc at build time ([d2c9eae](https://github.com/emyann/matron/commit/d2c9eae))
+* npm run publish ([3d63b84](https://github.com/emyann/matron/commit/3d63b84))
+* **templates:** fix nodemon issue on typescript-webpack ([8ca1200](https://github.com/emyann/matron/commit/8ca1200))
+
+
+### Features
+
+* add circle ci config ([618dfc4](https://github.com/emyann/matron/commit/618dfc4))
+* **templates:** add typescript-webpack template ([95dfdd9](https://github.com/emyann/matron/commit/95dfdd9))
+
+
+
+
+
 # [0.10.0](https://github.com/emyann/matron/compare/v0.9.0...v0.10.0) (2019-01-18)
 
 

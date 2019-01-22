@@ -1,6 +1,6 @@
 {
   "name": "matron",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "CLI for Rapid Application Development with TypeScript and more",
   "author": "Yann Renaudin <renaudin.yann@gmail.com>",
   "repository": "emyann/matron",
@@ -29,7 +29,7 @@
   "dependencies": {
     "@angular-devkit/core": "^7.2.1",
     "@angular-devkit/schematics": "^7.2.1",
-    "@matron/schematics": "^0.10.0",
+    "@matron/schematics": "^0.11.0",
     "@octokit/rest": "^16.9.0",
     "chalk": "^2.4.1",
     "cross-spawn": "^6.0.5",
