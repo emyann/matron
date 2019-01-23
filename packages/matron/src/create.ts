@@ -56,7 +56,7 @@ async function create(options: CreateOptions) {
 
   const normalizedName = normalize('/' + strings.dasherize(name));
   const projectName = normalizedName.split(path.sep).pop();
-  const projectPath = path.join(process.cwd(), normalizedName);
+  // const projectPath = path.join(process.cwd(), normalizedName);
 
   const templateName = template ? template : 'hello-world';
   let templatePath = '';
@@ -79,13 +79,10 @@ async function create(options: CreateOptions) {
     await runner.create({
       name: projectName ? projectName : name,
       projectPath: normalizedName,
-      templatePath
+      templatePath,
+      skipInstall
     });
-
-    if (!(dryRun || skipInstall)) {
-      npmInstall(projectPath);
-    }
-    printFinalMessage(projectPath);
+    // printFinalMessage(projectPath);
 
     return 0;
   } catch (err) {
