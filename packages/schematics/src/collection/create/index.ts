@@ -21,10 +21,14 @@ export interface CreateSchema {
 export function create(options: CreateSchema): Rule {
   return (host: Tree, context: SchematicContext) => {
     const { projectPath, templatePath, skipInstall } = options;
+    console.log('host', host.root.subdirs, projectPath);
     const templateSource = apply(url(templatePath), [move(projectPath)]);
+
     if (!skipInstall) {
-      context.addTask(new NodePackageInstallTask(projectPath));
+      console.log('here');
+      context.addTask(new NodePackageInstallTask('temp/q08'));
     }
+
     return chain([branchAndMerge(mergeWith(templateSource))])(host, context);
   };
 }

@@ -22,10 +22,12 @@
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "dependencies": {
-    "@angular-devkit/core": "^7.1.0",
-    "@angular-devkit/schematics": "^7.1.0",
+    "@angular-devkit/core": "^7.3.0-rc.0",
+    "@angular-devkit/schematics": "^7.3.0-rc.0",
+    "@types/globby": "^8.0.0",
     "chance": "^1.0.18",
     "cross-spawn": "^6.0.5",
+    "globby": "^9.0.0",
     "minimatch": "^3.0.4",
     "ora": "^3.0.0"
   },
