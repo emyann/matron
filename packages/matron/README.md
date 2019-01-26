@@ -66,7 +66,7 @@ matron create ts-app --template typescript-parcel
 matron create path/to/my-app --skip-install
 
 # only displays the files that will be created
-matron create ts-app --dry-run
+matron create my-app -t typescript-webpack --dry-run
 ```
 
 ### `matron snapshot`
