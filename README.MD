@@ -1,4 +1,6 @@
 # Matron
+[![npm](https://img.shields.io/npm/v/matron.svg?style=for-the-badge)](https://www.npmjs.com/package/matron) [![npm](https://img.shields.io/npm/dy/matron.svg?style=for-the-badge)](https://npm-stat.com/charts.html?package=matron) [![CircleCI (all branches)](https://img.shields.io/circleci/project/github/emyann/matron/master.svg?style=for-the-badge)](https://circleci.com/gh/emyann/matron)
+
 
 *Kick off your next project without configuring a build system ✋🏼  Just focus on the code 👈🏼*
 - [Matron](#matron)
