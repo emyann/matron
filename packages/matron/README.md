@@ -48,12 +48,13 @@ matron create <name> [--template] [--dry-run] [--skip-install]
 - **`name`**: Name or path of the project (e.g `matron create path/to/my/project`).
 
 **Options**
+-  **`--template`, `-t`**: Create a project out of a specific template.
+   -  ﹩`matron create ts-app --template typescript-parcel`
+- **`--skip-install`, `-s`**: Skip the installation of npm dependencies.
+  - ﹩`matron create ts-app --skip-install`
+- **`--dry-run`, `-d`**:  Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system.
+  - ﹩`matron create ts-app --dry-run` 
 
-| name, shortcut         | description                                                                                                          | example                                             |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
-| `--template`, `-t`     | Create a project out of a specific template.                                                                         | `matron create ts-app --template typescript-parcel` |
-| `--skip-install`, `-s` | Skip the installation of npm dependencies.                                                                           | `matron create ts-app --skip-install`               |
-| `--dry-run`, `-d`      | Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system. | `matron create ts-app --dry-run`                    |
 
 ### `matron snapshot`
 
