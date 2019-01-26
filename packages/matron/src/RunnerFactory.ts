@@ -30,9 +30,7 @@ function WorkflowFactory(options: RunnerOptions) {
         logger.warn(`ERROR! ${event.path} ${desc}.`);
         break;
       case 'update':
-        loggingQueue.push(`
-      ${chalk.white('UPDATE')} ${event.path} (${event.content.length} bytes)
-    `);
+        loggingQueue.push(`${chalk.white('UPDATE')} ${event.path} (${event.content.length} bytes)`);
         break;
       case 'create':
         loggingQueue.push(`${chalk.green('CREATE')} ${event.path} (${event.content.length} bytes)`);
