@@ -92,7 +92,7 @@ export function githubClient() {
   };
 }
 
-function ensureDirectory(directoryPath: string) {
+export function ensureDirectory(directoryPath: string) {
   if (existsSync(directoryPath)) return;
   return executeTask({ command: 'mkdir', args: ['-p', directoryPath] }, { stdio: [process.stdout] });
 }
