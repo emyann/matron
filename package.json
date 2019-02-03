@@ -4,11 +4,12 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "prestart": "npm run bootstrap",
-    "start": "lerna exec --scope @matron/schematics -- npm run start",
+    "start": "concurrently --raw \"lerna run start --scope @matron/schematics --stream\" \"lerna run watch --scope matron --stream\"",
     "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build",
     "publish": "npm run build && lerna publish -y"
   },
   "devDependencies": {
+    "concurrently": "^4.1.0",
     "lerna": "^3.6.0",
     "tslint": "^5.12.1"
   }
