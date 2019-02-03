@@ -112,7 +112,7 @@ async function create(options: CreateOptions) {
     }
   }
 
-  console.log('templatePath', templatePath, normalizedName);
+  // console.log('templatePath', templatePath, normalizedName);
 
   try {
     // explicitly set path because of https://github.com/angular/angular-cli/issues/13526
