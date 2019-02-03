@@ -9,6 +9,7 @@
     "publish": "npm run build && lerna publish -y"
   },
   "devDependencies": {
-    "lerna": "^3.6.0"
+    "lerna": "^3.6.0",
+    "tslint": "^5.12.1"
   }
 }
