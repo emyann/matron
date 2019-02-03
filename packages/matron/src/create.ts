@@ -8,6 +8,7 @@ import { githubClient, ensureDirectory } from './templates/templates.list';
 import { executeTask } from '@matron/schematics/dist/collection/add';
 import { snapshot, snapshotCommand } from './snapshot/snapshot';
 import appRoot from 'app-root-path';
+import chalk from 'chalk';
 
 interface CreateOptions {
   name: string;
@@ -66,7 +67,14 @@ async function create(options: CreateOptions) {
   // console.log('options', options, p);
   const templateName = template ? template : 'hello-world';
   let templatePath = '';
-
+  if (dryRun) {
+    console.log(
+      chalk
+        .bgHex('#abedd8')
+        .hex('#173d4e')
+        .bold(' Dry Run Mode ')
+    );
+  }
   const templateCacheDir = path.join(appRoot.path, 'cache/templates/src');
   if (isDev) {
     templatePath = path.join(
@@ -79,7 +87,7 @@ async function create(options: CreateOptions) {
     if (!p) {
       // ATM lookup matron own templates hosted in github
       // TODO: At some point, should come from npm@version package
-      console.log(`downloading template ${templateName} from github`);
+      console.log(chalk`{hex('#00b6ff') downloading template ${templateName} from github}`);
       await githubClient().downloadTemplate(templateName, templateCacheDir);
     } else {
       const tempCacheDir = path.join(appRoot.path, 'temp_cache/templates/src');
@@ -89,15 +97,16 @@ async function create(options: CreateOptions) {
         case 'now':
           {
             const nowCommmand = [p, 'init', templateName];
-            console.log(`installing template ${templateName} from Now cli`);
+            logInstallTemplate(templateName, 'Now CLI');
             executeTask({ command: `npx`, args: nowCommmand }, { cwd: tempCacheDir });
           }
           break;
         case 'cra':
           {
-            const nowCommmand = ['create-react-app', templateName, '--typescript'];
-            console.log(`installing template ${templateName} from create-react-app`);
-            executeTask({ command: `npx`, args: nowCommmand }, { cwd: tempCacheDir });
+            const craCommand = ['create-react-app', templateName, '--typescript'];
+            logInstallTemplate(templateName, 'create-react-app');
+
+            executeTask({ command: `npx`, args: craCommand }, { cwd: tempCacheDir });
           }
           break;
         default: {
@@ -138,4 +147,14 @@ async function create(options: CreateOptions) {
 
     return 1;
   }
+}
+
+function logInstallTemplate(templateName: string, providerName: string) {
+  console.log(
+    chalk
+      .bgHex('#abedd8')
+      .hex('#173d4e')
+      .bold(' Install template '),
+    chalk`{hex('#00b6ff') ${templateName} from ${providerName}}`
+  );
 }

@@ -2,6 +2,7 @@ import { CommandModule } from 'yargs';
 import { Runner } from '../RunnerFactory';
 import { SnapshotSchema } from '@matron/schematics';
 import path from 'path';
+import chalk from 'chalk';
 
 export const snapshot: CommandModule<SnapshotOptions, SnapshotOptions> = {
   command: 'snapshot [path] [destination]',
@@ -35,6 +36,14 @@ interface CommonOptions {
 }
 export async function snapshotCommand(options: SnapshotOptions) {
   const { path: pathToSnapshot, dryRun, destination, ignore } = options;
+  if (dryRun) {
+    console.log(
+      chalk
+        .bgHex('#abedd8')
+        .hex('#173d4e')
+        .bold(' Dry Run Mode ')
+    );
+  }
   const runner = new Runner({ dryRun: !!dryRun });
   return runner.snapshot({ path: pathToSnapshot, destination, ignore });
 }
