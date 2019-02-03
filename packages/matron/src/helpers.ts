@@ -30,3 +30,10 @@ export function executeTask(task: Task, options: SpawnSyncOptions = { stdio: 'in
   }
   return spawn.sync(task.command, task.args, { stdio, cwd });
 }
+
+export function displayH1(text: string) {
+  return chalk
+    .bgHex('#abedd8')
+    .hex('#173d4e')
+    .bold(` ${text} `);
+}

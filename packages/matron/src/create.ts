@@ -1,14 +1,14 @@
 import path from 'path';
 import { CommandModule } from 'yargs';
-import { strings, normalize } from '@angular-devkit/core';
+import { strings } from '@angular-devkit/core';
 import { UnsuccessfulWorkflowExecution } from '@angular-devkit/schematics';
 import { Runner } from './RunnerFactory';
-import { npmInstall, printFinalMessage } from './helpers';
 import { githubClient, ensureDirectory } from './templates/templates.list';
 import { executeTask } from '@matron/schematics/dist/collection/add';
-import { snapshot, snapshotCommand } from './snapshot/snapshot';
+import { snapshotCommand } from './snapshot/snapshot';
 import appRoot from 'app-root-path';
 import chalk from 'chalk';
+import { displayH1 } from './helpers';
 
 interface CreateOptions {
   name: string;
@@ -68,12 +68,7 @@ async function create(options: CreateOptions) {
   const templateName = template ? template : 'hello-world';
   let templatePath = '';
   if (dryRun) {
-    console.log(
-      chalk
-        .bgHex('#abedd8')
-        .hex('#173d4e')
-        .bold(' Dry Run Mode ')
-    );
+    console.log(displayH1('Dry Run Mode'));
   }
   const templateCacheDir = path.join(appRoot.path, 'cache/templates/src');
   if (isDev) {
@@ -150,11 +145,5 @@ async function create(options: CreateOptions) {
 }
 
 function logInstallTemplate(templateName: string, providerName: string) {
-  console.log(
-    chalk
-      .bgHex('#abedd8')
-      .hex('#173d4e')
-      .bold(' Install template '),
-    chalk`{hex('#00b6ff') ${templateName} from ${providerName}}`
-  );
+  console.log(displayH1('Install template'), chalk`{hex('#00b6ff') ${templateName} from ${providerName}}`);
 }
