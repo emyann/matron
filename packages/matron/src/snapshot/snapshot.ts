@@ -1,7 +1,7 @@
 import { CommandModule } from 'yargs';
 import { Runner } from '../RunnerFactory';
 import { SnapshotSchema } from '@matron/schematics';
-import { resolve } from 'path';
+import path from 'path';
 
 export const snapshot: CommandModule<SnapshotOptions, SnapshotOptions> = {
   command: 'snapshot [path] [destination]',
@@ -24,7 +24,7 @@ export const snapshot: CommandModule<SnapshotOptions, SnapshotOptions> = {
     }
   },
   handler: args => {
-    const options = { ...args, path: args.path ? resolve(args.path) : resolve(process.cwd()) };
+    const options = { ...args, path: args.path ? path.resolve(args.path) : path.resolve(process.cwd()) };
     snapshotCommand(options);
   }
 };
@@ -34,7 +34,7 @@ interface CommonOptions {
   dryRun?: boolean;
 }
 export async function snapshotCommand(options: SnapshotOptions) {
-  const { path, dryRun, destination, ignore } = options;
+  const { path: pathToSnapshot, dryRun, destination, ignore } = options;
   const runner = new Runner({ dryRun: !!dryRun });
-  return runner.snapshot({ path, destination, ignore });
+  return runner.snapshot({ path: pathToSnapshot, destination, ignore });
 }
