@@ -26,10 +26,8 @@ export function snapshot(options: SnapshotSchema): Rule {
   const defaultOptions = {
     ignore: ['node_modules', 'node_modules/**/*', 'package-lock.json', 'CHANGELOG.md', '.DS_Store']
   };
-  const {
-    path: pathToSnapshot = './',
-    ignore = !options.ignore ? defaultOptions.ignore : defaultOptions.ignore.concat(options.ignore)
-  } = options;
+  const { path: pathToSnapshot = './' } = options;
+  const ignore = !options.ignore ? defaultOptions.ignore : defaultOptions.ignore.concat(options.ignore);
 
   const destination = getDestinationDirectory(options.destination);
 
