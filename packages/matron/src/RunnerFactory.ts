@@ -20,7 +20,12 @@ function WorkflowFactory(options: RunnerOptions) {
   /** Create the workflow that will be executed with this run. */
   let loggingQueue: string[] = [];
   let error = false;
-  const workflow = new NodeWorkflow(fsHost, { dryRun, root: path as Path });
+  let workflow;
+  if (path) {
+    workflow = new NodeWorkflow(fsHost, { dryRun, root: normalize(path) });
+  } else {
+    workflow = new NodeWorkflow(fsHost, { dryRun });
+  }
   workflow.reporter.subscribe((event: DryRunEvent) => {
     switch (event.kind) {
       case 'error':
