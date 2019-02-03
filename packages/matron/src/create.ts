@@ -109,13 +109,13 @@ async function create(options: CreateOptions) {
         path: path.join(tempCacheDir, templateName),
         destination: path.join(templateCacheDir, templateName)
       });
-      console.log('end of snapshotCommand');
     }
   }
 
   console.log('templatePath', templatePath, normalizedName);
 
   try {
+    // explicitly set path because of https://github.com/angular/angular-cli/issues/13526
     const runner = new Runner({ dryRun, path: process.cwd() });
     await runner.create({
       name: projectName ? projectName : name,
