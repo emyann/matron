@@ -1,5 +1,5 @@
 import { createConsoleLogger, NodeJsSyncHost } from '@angular-devkit/core/node';
-import { virtualFs, normalize } from '@angular-devkit/core';
+import { virtualFs, normalize, Path } from '@angular-devkit/core';
 import { NodeWorkflow } from '@angular-devkit/schematics/tools';
 import { DryRunEvent } from '@angular-devkit/schematics';
 import chalk from 'chalk';
@@ -12,15 +12,20 @@ interface RunnerOptions {
 }
 
 function WorkflowFactory(options: RunnerOptions) {
-  const { dryRun, path = process.cwd() } = options;
+  const { dryRun, path } = options;
 
   const logger = createConsoleLogger(true, process.stdout, process.stderr);
-  const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost(), normalize(path));
+  const fsHost = new virtualFs.ScopedHost(new NodeJsSyncHost());
 
   /** Create the workflow that will be executed with this run. */
   let loggingQueue: string[] = [];
   let error = false;
-  const workflow = new NodeWorkflow(fsHost, { dryRun });
+  let workflow;
+  if (path) {
+    workflow = new NodeWorkflow(fsHost, { dryRun, root: normalize(path) });
+  } else {
+    workflow = new NodeWorkflow(fsHost, { dryRun });
+  }
   workflow.reporter.subscribe((event: DryRunEvent) => {
     switch (event.kind) {
       case 'error':
@@ -30,9 +35,7 @@ function WorkflowFactory(options: RunnerOptions) {
         logger.warn(`ERROR! ${event.path} ${desc}.`);
         break;
       case 'update':
-        loggingQueue.push(`
-      ${chalk.white('UPDATE')} ${event.path} (${event.content.length} bytes)
-    `);
+        loggingQueue.push(`${chalk.white('UPDATE')} ${event.path} (${event.content.length} bytes)`);
         break;
       case 'create':
         loggingQueue.push(`${chalk.green('CREATE')} ${event.path} (${event.content.length} bytes)`);
@@ -63,9 +66,6 @@ export class Runner {
   workflow: NodeWorkflow;
   constructor(options: RunnerOptions) {
     this.workflow = WorkflowFactory(options);
-    if (options.dryRun) {
-      console.log('Dry Run Mode');
-    }
   }
   async create(options: CreateSchema) {
     return this.execute('create', options);

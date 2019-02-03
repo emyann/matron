@@ -1,43 +1,38 @@
-# `Matron`
+# Matron
 
-A comprehensive CLI for Rapid Application Development with TypeScript and more.
+> Kick off your next project without configuring a build system ✋🏼
+> **Just focus on the code 👈🏼**
 
-- [`Matron`](#matron)
+[![npm](https://img.shields.io/npm/v/matron.svg?style=for-the-badge)](https://www.npmjs.com/package/matron) [![npm](https://img.shields.io/npm/dy/matron.svg?style=for-the-badge)](https://npm-stat.com/charts.html?package=matron) [![CircleCI (all branches)](https://img.shields.io/circleci/project/github/emyann/matron/master.svg?style=for-the-badge)](https://circleci.com/gh/emyann/matron)
+
+- [Matron](#matron)
   - [Getting Started](#getting-started)
+  - [Features](#features)
   - [Commands](#commands)
     - [`matron create`](#matron-create)
-      - [Usage](#usage)
-      - [Arguments](#arguments)
-        - [`name`](#name)
-      - [Options](#options)
-        - [`--template`, `-t`](#template--t)
-        - [`--skip-install`, `-s`](#skip-install--s)
-        - [`--dry-run`, `-d`](#dry-run--d)
     - [`matron snapshot`](#matron-snapshot)
-      - [Usage](#usage-1)
-      - [Arguments](#arguments-1)
-        - [`path`](#path)
-        - [`destination`](#destination)
-      - [Options](#options-1)
-        - [`--ignore`, `-i`](#ignore--i)
-        - [`--dry-run`, `-d`](#dry-run--d-1)
     - [`matron templates list`](#matron-templates-list)
-      - [Usage](#usage-2)
 
 ## Getting Started
 
-**Immediately with `npx`**
+**Using `npx`**
 
 ```sh
 npx matron create ts-app
 ```
 
-**Or by installing it globally**
+**Install with `npm`**
 
 ```sh
 npm i -g matron
 matron create ts-app
 ```
+
+## Features
+
+- **Dry run mode**: Commands are run against a virtual file system before they are applied. ([read more about schematics](https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2))
+- **TypeScript First**: Matron is strongly oriented to produce enterprise-grade TypeScript projects but also support a broad range of JavaScript templates.
+- **Integrations**: Ability to start a project out of popular frameworks templates like [`create-react-app`](https://github.com/facebook/create-react-app), [`now`](https://github.com/zeit/now-examples)
 
 ## Commands
 
@@ -45,93 +40,69 @@ matron create ts-app
 
 > Create a project
 
-#### Usage
+**Usage**
 
 ```sh
 matron create <name> [--template] [--dry-run] [--skip-install]
 ```
 
-#### Arguments
+**Arguments**
 
-##### `name`
+- **`name`**: Name or path of the project to create.
 
-Name or path of the project (e.g `matron create path/to/my/project`)
+**Options**
 
-#### Options
+- **`--template`, `-t`**: Create a project out of a specific template.
+- **`--skip-install`, `-s`**: Skip the installation of npm dependencies.
+- **`--dry-run`, `-d`**: Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system.
 
-##### `--template`, `-t`
-
-Create a project out of a specific template.
+**Examples**
 
 ```sh
-# `matron templates list` to display the available templates
-matron create ts-app -t react-typescript
-
+# creates TypeScript project configured with Parcel
 matron create ts-app --template typescript-parcel
-```
 
-##### `--skip-install`, `-s`
+# creates the files but skip npm install
+matron create path/to/my-app --skip-install
 
-Skip the installation of npm dependencies.
-
-```sh
-matron create ts-app -s
-matron create ts-app --skip-install
-```
-
-##### `--dry-run`, `-d`
-
-Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system.
-
-```sh
-matron create ts-app -d
-matron create ts-app --dry-run
+# only displays the files that will be created
+matron create my-app -t typescript-webpack --dry-run
 ```
 
 ### `matron snapshot`
 
 > Snapshot a state of your file system to create a template.
 
-#### Usage
+**Usage**
 
 ```sh
 matron snapshot [path] [destination] [--ignore] [--dry-run]
 ```
 
-#### Arguments
+**Arguments**
 
-##### `path`
+- **`path`**: Directory to snapshot.
+- **`destination`**: Destination directory where to store the snapshot.
 
-Directory to snapshot.
+**Options**
 
-##### `destination`
+- **`--ignore`, `-i`**: Specify glob files to ignore..
+- **`--dry-run`, `-d`**: Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system.
 
-Destination directory where to store the snapshot.
-
-#### Options
-
-##### `--ignore`, `-i`
-
-Specify glob files to ignore.
+**Examples**
 
 ```sh
-# Will ignore dist and node_modules folders
-matron snapshot ./ /my-boilerplate -i "dist/**" "node_modules/**"
-```
+matron snapshot ./ /my-boilerplate -i "dist" "lib/**.spec.ts"
 
-##### `--dry-run`, `-d`
-
-Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system.
-
-```sh
-matron snapshot -d
+# snaphots the files in the current folder to a new folder friendly named
+matron snapshot --dry-run
 ```
 
 ### `matron templates list`
 
 > List the available templates
 
-#### Usage
+**Usage**
 
 ```sh
 matron templates list

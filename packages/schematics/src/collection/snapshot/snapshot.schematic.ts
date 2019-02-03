@@ -1,48 +1,56 @@
-import { Rule, SchematicContext, Tree, chain, filter } from '@angular-devkit/schematics';
-import { normalize, strings } from '@angular-devkit/core';
+import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { strings } from '@angular-devkit/core';
 import path from 'path';
 import Chance from 'chance';
-import minimatch from 'minimatch';
+import globby from 'globby';
+
 export interface SnapshotSchema {
   path?: string;
   destination?: string;
   ignore?: string[];
 }
 
-export function snapshot(options: SnapshotSchema): Rule {
+function getDestinationDirectory(dir: string | undefined) {
   const chance = new Chance();
+
+  if (!dir) {
+    return strings.dasherize(`./${chance.first()}${chance.animal({ type: 'desert' })}`);
+  } else if (!path.isAbsolute(dir)) {
+    return path.join(process.cwd(), dir);
+  } else {
+    return dir;
+  }
+}
+
+export function snapshot(options: SnapshotSchema): Rule {
   const defaultOptions = {
-    ignore: ['/node_modules/**/*', 'package-lock.json', 'CHANGELOG.md', '.DS_Store']
+    ignore: ['node_modules', 'node_modules/**/*', 'package-lock.json', 'CHANGELOG.md', '.DS_Store']
   };
-  const {
-    path: pathToSnapshot = './',
-    destination = strings.dasherize(`./${chance.first()}${chance.animal({ type: 'desert' })}`),
-    ignore
-  } = options;
+  const { path: pathToSnapshot = './' } = options;
+  const ignore = !options.ignore ? defaultOptions.ignore : defaultOptions.ignore.concat(options.ignore);
 
-  const finalOptions = {
-    pathToSnapshot,
-    destination,
-    ignore: !ignore ? defaultOptions.ignore : defaultOptions.ignore.concat(ignore)
-  };
+  const destination = getDestinationDirectory(options.destination);
 
-  const shouldBeIgnored = (filePath: string) =>
-    finalOptions.ignore.some(
-      ignored =>
-        minimatch(filePath, `/${ignored}`, { dot: true, matchBase: true }) || filePath === normalize(`/${ignored}`)
-    );
-  return (host: Tree, context: SchematicContext) => {
-    const ignoreFiles = filter(pathF => !shouldBeIgnored(pathF));
+  return (host: Tree, _context: SchematicContext) => {
+    const filesPath = globby.sync('**', {
+      cwd: pathToSnapshot,
+      ignore,
+      gitignore: true
+    });
+    filesPath.forEach(filePath => {
+      const targetPath = path.join(destination, filePath);
+      const sourcePath = path.join(pathToSnapshot, filePath);
+      const fileEntry = host.get(sourcePath);
 
-    const rule: Rule = host => {
-      host.getDir(pathToSnapshot).visit((filePath, entry) => {
-        if (entry) {
-          host.create(normalize(path.join(destination, filePath)), entry.content);
+      if (fileEntry) {
+        if (!host.exists(targetPath)) {
+          host.create(targetPath, fileEntry.content);
+        } else {
+          host.overwrite(targetPath, fileEntry.content);
         }
-      });
-      return host;
-    };
+      }
+    });
 
-    return chain([ignoreFiles, rule])(host, context);
+    return host;
   };
 }
