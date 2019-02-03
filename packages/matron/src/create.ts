@@ -116,7 +116,7 @@ async function create(options: CreateOptions) {
   console.log('templatePath', templatePath, normalizedName);
 
   try {
-    const runner = new Runner({ dryRun });
+    const runner = new Runner({ dryRun, path: process.cwd() });
     await runner.create({
       name: projectName ? projectName : name,
       projectPath: normalizedName,
