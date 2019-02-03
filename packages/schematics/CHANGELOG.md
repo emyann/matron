@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.12.1](https://github.com/emyann/matron/compare/v0.12.0...v0.12.1) (2019-02-03)
+
+
+### Bug Fixes
+
+* fix issue with strip comment missing in deps ([e86b95a](https://github.com/emyann/matron/commit/e86b95a))
+
+
+
+
+
 # [0.12.0](https://github.com/emyann/matron/compare/v0.11.0...v0.12.0) (2019-02-03)
 
 
