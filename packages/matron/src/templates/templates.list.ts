@@ -1,10 +1,10 @@
 import { CommandModule } from 'yargs';
 import Octokit, { Response } from '@octokit/rest';
-import chalk from 'chalk';
 import { existsSync } from 'fs';
 import path from 'path';
-import { executeTask } from '../helpers';
+import { executeTask, displayH1 } from '../helpers';
 import fs from 'fs';
+import Table, { Cell, HorizontalTable, VerticalTable } from 'cli-table3';
 
 interface GithubItemContent {
   download_url: null;
@@ -114,9 +114,15 @@ async function templatesCommand(options: TemplatesCommand) {
   switch (options.cmd) {
     case TemplatesSubCommand.list: {
       const templates = await githubClient().listTemplates();
-      templates.forEach(template => {
-        console.log(`- ${chalk.bold(template)}`);
-      });
+      const table = new Table({
+        head: [displayH1('Name'), displayH1('Provider')],
+        colWidths: [50, 25]
+      }) as HorizontalTable;
+
+      const entries = templates.map(template => [template, 'matron']);
+      table.push(...entries);
+
+      console.log(table.toString());
     }
     default:
       break;
