@@ -68,8 +68,8 @@ jobs:
           name: NPMRC
           command: echo "registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
       - run:
-        name: Set Git user info
-        command: git config --global user.email "renaudin.yann@gmail.com"
+          name: Set Git user info
+          command: git config --global user.email "renaudin.yann@gmail.com"
       - run:
           name: Publish to NPM
           command: npm run publish
