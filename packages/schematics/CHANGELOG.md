@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.5](https://github.com/emyann/matron/compare/v0.13.4...v0.13.5) (2019-02-13)
+
+
+### Bug Fixes
+
+* lift dev deps to root ([3c5c3a6](https://github.com/emyann/matron/commit/3c5c3a6))
+
+
+
+
+
 ## [0.13.4](https://github.com/emyann/matron/compare/v0.13.3...v0.13.4) (2019-02-13)
 
 **Note:** Version bump only for package @matron/schematics
