@@ -67,6 +67,7 @@ jobs:
           command: |
             ls -l
             echo "registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+            cat .npmrc
       - run:
           name: Set Git user info
           command: |
