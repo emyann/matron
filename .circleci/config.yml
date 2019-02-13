@@ -54,9 +54,7 @@ jobs:
   publish:
     docker:
       - image: circleci/node:10.6
-
     working_directory: ~/repo
-
     steps:
       - checkout
       - restore_cache:
@@ -69,7 +67,10 @@ jobs:
           command: echo "registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
       - run:
           name: Set Git user info
-          command: git config --global user.email "renaudin.yann@gmail.com"
+          commands:
+            - git config --global -l
+            - git config --global user.email renaudin.yann@gmail.com
+            - git config --global user.name Yann Renaudinn
       - run:
           name: Publish to NPM
           command: npm run publish
