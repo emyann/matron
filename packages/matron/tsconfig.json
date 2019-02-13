@@ -13,7 +13,7 @@
     "strictNullChecks": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "allowJs": true
+    "declaration": true
   },
-  "include": ["src/**/*", "bin/**/*"]
+  "include": ["src"]
 }
