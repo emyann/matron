@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/emyann/matron/compare/v0.12.1...v0.13.0) (2019-02-13)
+
+
+### Bug Fixes
+
+* build system. update angular/schematics version. webpack magic ([a28771a](https://github.com/emyann/matron/commit/a28771a))
+* fix output bundle of the cli ([44b6f5c](https://github.com/emyann/matron/commit/44b6f5c))
+* remove cli types declaration ([70ded2a](https://github.com/emyann/matron/commit/70ded2a))
+* use permanent bin file ([f09aa48](https://github.com/emyann/matron/commit/f09aa48))
+
+
+### Features
+
+* use npm file specifiers ([f898d99](https://github.com/emyann/matron/commit/f898d99))
+
+
+
+
+
 ## [0.12.1](https://github.com/emyann/matron/compare/v0.12.0...v0.12.1) (2019-02-03)
 
 

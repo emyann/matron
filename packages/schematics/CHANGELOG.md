@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/emyann/matron/compare/v0.12.1...v0.13.0) (2019-02-13)
+
+
+### Bug Fixes
+
+* build system. update angular/schematics version. webpack magic ([a28771a](https://github.com/emyann/matron/commit/a28771a))
+
+
+### Features
+
+* add jest and UTs for snapshot schematic ([3304fd2](https://github.com/emyann/matron/commit/3304fd2))
+* use npm file specifiers ([f898d99](https://github.com/emyann/matron/commit/f898d99))
+
+
+
+
+
 ## [0.12.1](https://github.com/emyann/matron/compare/v0.12.0...v0.12.1) (2019-02-03)
 
 
