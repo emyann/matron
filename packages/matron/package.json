@@ -15,7 +15,7 @@
   ],
   "license": "MIT",
   "bin": {
-    "matron": "dist/bin/matron.js"
+    "matron": "bin/matron.js"
   },
   "files": [
     "dist"

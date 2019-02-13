@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "postinstall": "npm i packages/*",
+    "prepare": "npm i packages/*",
     "start": "concurrently --raw \"lerna run start --scope @matron/schematics --stream\" \"lerna run watch --scope matron --stream\"",
     "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build",
     "publish": "npm run build && lerna publish -y",
