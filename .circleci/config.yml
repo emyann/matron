@@ -67,7 +67,7 @@ jobs:
           command: echo "registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
       - run:
           name: Set Git user info
-          commands:
+          command:
             - git config --global -l
             - git config --global user.email renaudin.yann@gmail.com
             - git config --global user.name Yann Renaudinn
