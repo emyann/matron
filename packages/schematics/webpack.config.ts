@@ -5,8 +5,11 @@ import glob from 'glob';
 import nodeExternals from 'webpack-node-externals';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
-const files = glob.sync('./src/collection/**/*.ts', { ignore: ['./src/**/files/**/*'] });
-const entries = files.reduce((acc, file) => {
+// Fetch all the entrypoints to respect angular schematics output structure
+const files = glob.sync('./src/collection/**/*.ts', {
+  ignore: ['./src/**/files/**/*', './src/**/*.spec.ts']
+});
+const entries = files.reduce<{ [path: string]: string }>((acc, file) => {
   const {
     groups: { filePath }
   } = /.\/src(?<filePath>\/.*).ts/.exec(file) as any;
@@ -16,7 +19,7 @@ const entries = files.reduce((acc, file) => {
 
 const config: webpack.Configuration = {
   target: 'node',
-  externals: [nodeExternals()],
+  externals: [nodeExternals({ modulesFromFile: true })],
   mode: 'production',
   entry: entries,
   output: {
@@ -29,7 +32,7 @@ const config: webpack.Configuration = {
     rules: [
       {
         test: /\.(js|mjs|ts)$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /dist/],
         include: path.join(__dirname, '/src'),
         loader: 'babel-loader'
       }
@@ -45,11 +48,6 @@ const config: webpack.Configuration = {
       },
       {
         from: './src/collection.json'
-      },
-      <any>{
-        from: './src/**/*/files/**/*.ts',
-        test: /src\/(.+)\.ts$/,
-        to: './[1].[ext]'
       }
     ]),
     new ForkTsCheckerWebpackPlugin()

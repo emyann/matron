@@ -3,50 +3,27 @@ import { strings } from '@angular-devkit/core';
 import path from 'path';
 import Chance from 'chance';
 import globby from 'globby';
-
 export interface SnapshotSchema {
   path?: string;
   destination?: string;
   ignore?: string[];
 }
 
-function getDestinationDirectory(dir: string | undefined) {
-  const chance = new Chance();
-
-  if (!dir) {
-    return strings.dasherize(`./${chance.first()}${chance.animal({ type: 'desert' })}`);
-  } else if (!path.isAbsolute(dir)) {
-    return path.join(process.cwd(), dir);
-  } else {
-    return dir;
-  }
-}
-
 export function snapshot(options: SnapshotSchema): Rule {
-  const defaultOptions = {
-    ignore: ['node_modules', 'node_modules/**/*', 'package-lock.json', 'CHANGELOG.md', '.DS_Store']
-  };
-  const { path: pathToSnapshot = './' } = options;
-  const ignore = !options.ignore ? defaultOptions.ignore : defaultOptions.ignore.concat(options.ignore);
-
+  const { path: pathToSnapshot = './', ignore } = options;
   const destination = getDestinationDirectory(options.destination);
 
   return (host: Tree, _context: SchematicContext) => {
-    const filesPath = globby.sync('**', {
-      cwd: pathToSnapshot,
-      ignore,
-      gitignore: true
-    });
-    filesPath.forEach(filePath => {
-      const targetPath = path.join(destination, filePath);
-      const sourcePath = path.join(pathToSnapshot, filePath);
-      const fileEntry = host.get(sourcePath);
+    const mapping = getFilesMapping(pathToSnapshot, destination, ignore);
+
+    mapping.forEach(({ source, target }) => {
+      const fileEntry = host.get(source);
 
       if (fileEntry) {
-        if (!host.exists(targetPath)) {
-          host.create(targetPath, fileEntry.content);
+        if (!host.exists(target)) {
+          host.create(target, fileEntry.content);
         } else {
-          host.overwrite(targetPath, fileEntry.content);
+          host.overwrite(target, fileEntry.content);
         }
       }
     });
@@ -54,3 +31,42 @@ export function snapshot(options: SnapshotSchema): Rule {
     return host;
   };
 }
+
+// TODO: chance init might be slow. monitor this
+const chance = new Chance();
+
+export function getDestinationDirectory(dir: string | undefined): string {
+  if (dir) {
+    if (path.isAbsolute(dir)) {
+      return dir;
+    } else {
+      return path.join(process.cwd(), dir);
+    }
+  } else {
+    const randomRelativedir = strings.dasherize(`./${chance.first()}${chance.animal({ type: 'desert' })}`);
+    return getDestinationDirectory(randomRelativedir);
+  }
+}
+
+export const DEFAULT_IGNORE = ['node_modules', 'node_modules/**/*', 'package-lock.json', 'CHANGELOG.md', '.DS_Store'];
+
+export const getFilesMapping = (
+  pathToSnapshot: string,
+  destination: string,
+  ignore?: string[]
+): { source: string; target: string }[] => {
+  ignore = !ignore ? DEFAULT_IGNORE : DEFAULT_IGNORE.concat(ignore);
+  const filesPath = globby.sync('**', {
+    cwd: pathToSnapshot,
+    ignore,
+    gitignore: true
+  });
+
+  const mapping = filesPath.map(filePath => {
+    const source = path.join(pathToSnapshot, filePath);
+    const target = path.join(destination, filePath);
+    return { source, target };
+  });
+
+  return mapping;
+};

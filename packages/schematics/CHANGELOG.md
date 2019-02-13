@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.12.1](https://github.com/emyann/matron/compare/v0.12.0...v0.12.1) (2019-02-03)
+
+
+### Bug Fixes
+
+* fix issue with strip comment missing in deps ([e86b95a](https://github.com/emyann/matron/commit/e86b95a))
+
+
+
+
+
+# [0.12.0](https://github.com/emyann/matron/compare/v0.11.0...v0.12.0) (2019-02-03)
+
+
+### Bug Fixes
+
+* allow relative path when creating projects ([6e0c760](https://github.com/emyann/matron/commit/6e0c760))
+* silly default value for ignore option ([e0af0fd](https://github.com/emyann/matron/commit/e0af0fd))
+* use schematics task to install npm deps ([3c34489](https://github.com/emyann/matron/commit/3c34489))
+
+
+### Features
+
+* **schematics:** use globby instead of minimatch for snapshot schematics ([f44304b](https://github.com/emyann/matron/commit/f44304b))
+* transform path to absolute url when it's not ([c7ac51a](https://github.com/emyann/matron/commit/c7ac51a))
+
+
+
+
+
 # [0.11.0](https://github.com/emyann/matron/compare/v0.10.0...v0.11.0) (2019-01-22)
 
 **Note:** Version bump only for package @matron/schematics
