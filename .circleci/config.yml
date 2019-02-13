@@ -64,9 +64,7 @@ jobs:
             - v1-dependencies-
       - run:
           name: NPMRC
-          command: |
-            ls -l
-            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
       - run:
           name: Set Git user info
           command: |
