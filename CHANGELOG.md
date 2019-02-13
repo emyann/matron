@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.1](https://github.com/emyann/matron/compare/v0.13.0...v0.13.1) (2019-02-13)
+
+
+### Bug Fixes
+
+* authentication failing when publishing ([e4ed544](https://github.com/emyann/matron/commit/e4ed544))
+
+
+
+
+
 # [0.13.0](https://github.com/emyann/matron/compare/v0.12.1...v0.13.0) (2019-02-13)
 
 
