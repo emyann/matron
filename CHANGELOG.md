@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.3](https://github.com/emyann/matron/compare/v0.13.2...v0.13.3) (2019-02-13)
+
+
+### Bug Fixes
+
+* npmrc ([d3b0a55](https://github.com/emyann/matron/commit/d3b0a55))
+
+
+
+
+
 ## [0.13.2](https://github.com/emyann/matron/compare/v0.13.1...v0.13.2) (2019-02-13)
 
 
