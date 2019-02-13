@@ -66,6 +66,9 @@ jobs:
           name: NPMRC
           command: echo "registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
       - run:
+          name: Build
+          command: npm run build
+      - run:
           name: Publish to NPM
           command: npm run publish
 
