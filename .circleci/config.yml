@@ -32,8 +32,11 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run:
-          name: Tests
+          name: Unit Tests
           command: npm t
+      - run:
+          name: E2E Tests
+          command: npm run e2e
 
   publish:
     docker:
