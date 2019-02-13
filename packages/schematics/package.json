@@ -17,13 +17,13 @@
   "schematics": "./dist/collection.json",
   "scripts": {
     "start": "cross-env NODE_ENV=developement npm run build -- -w",
-    "build": "npx tsc & npm run webpack -- --display-error-details",
-    "webpack": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" npx webpack",
+    "build": "tsc & npm run webpack -- --display-error-details",
+    "webpack": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "dependencies": {
-    "@angular-devkit/core": "^7.3.0-rc.0",
-    "@angular-devkit/schematics": "^7.3.0-rc.0",
+    "@angular-devkit/core": "^7.3.1",
+    "@angular-devkit/schematics": "^7.3.1",
     "@types/globby": "^8.0.0",
     "chance": "^1.0.18",
     "cross-spawn": "^6.0.5",

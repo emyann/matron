@@ -70,11 +70,3 @@ export const getFilesMapping = (
 
   return mapping;
 };
-
-const module = {
-  snapshot,
-  getDestinationDirectory,
-  getFilesMapping
-};
-
-export default module;
