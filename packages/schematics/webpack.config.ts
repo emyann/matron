@@ -29,7 +29,7 @@ const config: webpack.Configuration = {
     rules: [
       {
         test: /\.(js|mjs|ts)$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/, /dist/, /\.(spec.ts)$/],
         include: path.join(__dirname, '/src'),
         loader: 'babel-loader'
       }

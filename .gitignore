@@ -5,3 +5,4 @@ dist/
 packages/matron/temp
 cache
 packages/matron/temp_cache
+coverage

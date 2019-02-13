@@ -6,11 +6,20 @@
     "prestart": "npm run bootstrap",
     "start": "concurrently --raw \"lerna run start --scope @matron/schematics --stream\" \"lerna run watch --scope matron --stream\"",
     "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build",
-    "publish": "npm run build && lerna publish -y"
+    "publish": "npm run build && lerna publish -y",
+    "test": "jest"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/jest": "^24.0.0",
+    "babel-jest": "^24.0.0",
     "concurrently": "^4.1.0",
+    "jest": "^24.1.0",
     "lerna": "^3.6.0",
-    "tslint": "^5.12.1"
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.1"
   }
 }
