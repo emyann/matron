@@ -1,6 +1,5 @@
 import yargs from 'yargs';
 import { createCommand } from './create';
-import { addCommand } from './add';
 import chalk from 'chalk';
 import { snapshot } from './snapshot/snapshot';
 import { templates } from './templates/templates.list';
@@ -14,10 +13,12 @@ Usage
   ${chalk.green('matron')} snapshot ./ ./my-boilerplate -i "dist/**" "node_modules/**"
   `;
 
-yargs.usage(usage);
-yargs.command(createCommand);
-// yargs.command(addCommand);
-yargs.command(snapshot);
-yargs.command(templates);
-
-yargs.help().wrap(110).argv;
+yargs
+  .usage(usage)
+  .help()
+  .wrap(110)
+  .showHelpOnFail(true)
+  .command(createCommand)
+  .command(snapshot)
+  .command(templates)
+  .demandCommand(2, '').argv;
