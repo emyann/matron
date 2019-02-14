@@ -27,9 +27,10 @@ export function create(options: CreateSchema): Rule {
     // Need to extract the relative path of the cwd because of https://github.com/angular/angular-cli/issues/13526
     const curDir = process.cwd();
     const dirRelativePath = path.relative(curDir, projectPath);
-    installNpmDeps(skipInstall, dirRelativePath, context);
 
-    return chain([branchAndMerge(mergeWith(templateSource))])(host, context);
+    installNpmDeps(skipInstall, dirRelativePath, context);
+    const res = chain([branchAndMerge(mergeWith(templateSource))])(host, context);
+    return res;
   };
 }
 

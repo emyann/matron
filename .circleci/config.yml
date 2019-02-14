@@ -33,7 +33,7 @@ jobs:
             - v1-dependencies-
       - run:
           name: Unit Tests
-          command: npm t
+          command: npm t -- --coverage
   e2e-test:
     docker:
       - image: circleci/node:10.6
