@@ -21,4 +21,6 @@ yargs
   .command(createCommand)
   .command(snapshot)
   .command(templates)
-  .demandCommand(2, '').argv;
+  .demandCommand()
+  .recommendCommands()
+  .strict().argv;
