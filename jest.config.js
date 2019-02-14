@@ -29,7 +29,8 @@ module.exports = {
     'packages/schematics/src/**/*.{js,jsx,ts,tsx}',
     '!**/*/webpack.config.{js,ts}',
     '!**/*/dist/**/*',
-    '!packages/matron/bin/**/*'
+    '!packages/matron/bin/**/*',
+    '!packages/schematics/src/collection/add/**/*'
   ],
 
   // An object that configures minimum threshold enforcement for coverage results
