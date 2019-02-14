@@ -10,6 +10,63 @@ describe('Snapshot', () => {
   beforeEach(() => {
     // jest.clearAllMocks();
   });
+  // TODO: fix monkey mock on globby sync
+  it('should skip file if cannot retrieve it on host', async () => {
+    const source = '/source';
+    const target = '/destination';
+    const ignore: string[] = [];
+    const SOURCE_FILES = [`file1.ts`, `folder/file2.ts`];
+    withFiles(source, ignore, SOURCE_FILES);
+
+    const initialTree = new HostTree();
+
+    initialTree.create(`${source}/another-file.ts`, '');
+    initialTree.create(`${source}/another-folder/file2.ts`, '');
+    const tree = schematicRunner.runSchematic<SnapshotSchema>(
+      'snapshot',
+      {
+        path: source,
+        destination: target
+      },
+      initialTree
+    );
+
+    expect(tree.files).toEqual([`${source}/another-file.ts`, `${source}/another-folder/file2.ts`]);
+  });
+
+  it('should overwrite target snapshot if it already exists', async () => {
+    const source = '/source';
+    const target = '/destination';
+    const ignore: string[] = [];
+
+    const files = [`file1.ts`, `folder/file2.ts`];
+    withFiles(source, ignore, files);
+
+    const mockContent = 'content updated';
+    const sourceFiles: File[] = files.map(file => ({ path: `${source}/${file}`, content: mockContent }));
+    const targetFiles: File[] = files.map(file => ({ path: `${target}/${file}` }));
+    const treeFiles = sourceFiles.concat(targetFiles);
+    const initialTree = getTree(sourceFiles.concat(targetFiles));
+
+    const tree = schematicRunner.runSchematic<SnapshotSchema>(
+      'snapshot',
+      {
+        path: source,
+        destination: target
+      },
+      initialTree
+    );
+    expect(tree.files).toEqual(treeFiles.map(f => f.path));
+
+    tree.files.forEach(path => {
+      const file = tree.get(path);
+      expect(file).toBeTruthy();
+      if (file) {
+        expect(file.content.toString()).toEqual(mockContent);
+      }
+    });
+  });
+
   it('should create a map of source and target files using globby get the paths', () => {
     const SOURCE_FILES = [`file1.ts`, `folder/file2.ts`];
     const source = '/path/to/snapshot';
@@ -25,7 +82,7 @@ describe('Snapshot', () => {
     ]);
   });
 
-  it('should snapshot', async () => {
+  it('should create a snapshot from a path to a destination', async () => {
     const source = '/source';
     const target = '/destination';
     const ignore: string[] = [];
@@ -49,7 +106,6 @@ describe('Snapshot', () => {
       jasmine.arrayContaining([`${target}/${SOURCE_FILES[0]}`, `${target}/${SOURCE_FILES[1]}`])
     );
   });
-
   it('should transform a relative path to an absolute path', () => {
     const relativePath = './';
     const absolutePath = getDestinationDirectory(relativePath);
@@ -59,10 +115,22 @@ describe('Snapshot', () => {
     const absolutePath = '/absolute/path';
     expect(absolutePath).toBe(getDestinationDirectory(absolutePath));
   });
-  it(`should return absolut path with a random folder name when no one is provided`, () => {
+  it(`should return absolute path with a random folder name when no one is provided`, () => {
     expect(getDestinationDirectory(undefined)).toMatch(process.cwd());
   });
 });
+
+interface File {
+  path: string;
+  content?: string;
+}
+function getTree(files: File[] = []) {
+  const tree = new HostTree();
+  files.forEach(({ path, content = '' }) => {
+    tree.create(path, content);
+  });
+  return tree;
+}
 function withFiles(source: string, ignore: string[], SOURCE_FILES: string[]) {
   let fn = jest.fn();
   fn.mockImplementation((...args) => {

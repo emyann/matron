@@ -25,18 +25,21 @@ module.exports = {
   // A list of reporter names that Jest uses when writing coverage reports
   coverageReporters: ['json', 'text', 'lcov', 'clover'],
   collectCoverageFrom: [
-    'packages/matron/**/*.{js,jsx,ts,tsx}',
-    'packages/schematics/**/*.{js,jsx,ts,tsx}',
-    '!**/*/webpack.config.{js,ts}'
+    'packages/matron/src/**/*.{js,jsx,ts,tsx}',
+    'packages/schematics/src/**/*.{js,jsx,ts,tsx}',
+    '!**/*/webpack.config.{js,ts}',
+    '!**/*/dist/**/*',
+    '!packages/matron/bin/**/*',
+    '!packages/schematics/src/collection/add/**/*'
   ],
 
   // An object that configures minimum threshold enforcement for coverage results
   coverageThreshold: {
     global: {
-      statements: 1,
-      branches: 1,
-      functions: 1,
-      lines: 1
+      statements: 15,
+      branches: 15,
+      functions: 15,
+      lines: 15
     }
   },
   // A path to a custom dependency extractor

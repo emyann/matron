@@ -15,7 +15,6 @@ export function snapshot(options: SnapshotSchema): Rule {
 
   return (host: Tree, _context: SchematicContext) => {
     const mapping = getFilesMapping(pathToSnapshot, destination, ignore);
-
     mapping.forEach(({ source, target }) => {
       const fileEntry = host.get(source);
 

@@ -3,7 +3,7 @@
   "schematics": {
     "create": {
       "description": "Create",
-      "factory": "./collection/create/index#create",
+      "factory": "./collection/create/create.schematic#create",
       "schema": "./collection/create/schema.json"
     },
     "add": {
