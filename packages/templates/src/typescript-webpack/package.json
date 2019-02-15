@@ -1,6 +1,7 @@
 {
   "name": "matron",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "run-p build:*",
     "start": "run-p watch:*",

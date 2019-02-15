@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
+    "lib": ["es2017", "dom"],
     "strict": true,
     "esModuleInterop": true,
     "declarationDir": "dist/types",
-    "declaration": true
+    "declaration": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": ["src"]
 }
