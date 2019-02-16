@@ -150,5 +150,5 @@ async function create(options: CreateOptions) {
 }
 
 function logInstallTemplate(templateName: string, providerName: string) {
-  console.log(displayH1('Install template'), chalk`{hex('#00b6ff') ${templateName} from ${providerName}}`);
+  console.log(displayH1`Install template`, chalk`{hex('#00b6ff') ${templateName} from ${providerName}}`);
 }
