@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/emyann/matron/compare/v0.13.7...v0.14.0) (2019-02-16)
+
+
+### Features
+
+* add react hook template ([e3a8569](https://github.com/emyann/matron/commit/e3a8569))
+
+
+
+
+
 ## [0.13.7](https://github.com/emyann/matron/compare/v0.13.6...v0.13.7) (2019-02-15)
 
 
