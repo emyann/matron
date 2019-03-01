@@ -1,6 +1,6 @@
 {
   "name": "@matron/schematics",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Matron Schematics actions used by matron cli",
   "keywords": [
     "schematics"
