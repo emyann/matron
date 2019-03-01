@@ -1,5 +1,5 @@
 {
-  "name": "@jive/realtime-events",
+  "name": "matron",
   "version": "0.1.2",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -28,6 +28,7 @@
     "nodemon": "^1.18.9",
     "nodemon-webpack-plugin": "^4.0.7",
     "npm-run-all": "^4.1.5",
+    "ts-node": "^8.0.2",
     "typescript": "^3.3.3333",
     "webpack": "4.29.5",
     "webpack-cli": "^3.1.0"

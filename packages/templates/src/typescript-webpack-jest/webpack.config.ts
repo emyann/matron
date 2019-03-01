@@ -1,7 +1,6 @@
 import path from 'path';
 import webpack from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import typescriptFormatter from 'react-dev-utils/typescriptFormatter';
 import NodemonPlugin from 'nodemon-webpack-plugin';
 import ModuleDependencyWarning from 'webpack/lib/ModuleDependencyWarning';
 
@@ -44,8 +43,7 @@ const webpackconfiguration: webpack.Configuration = {
       checkSyntacticErrors: true,
       reportFiles: ['**', '!**/*.json', '!**/__tests__/**', '!**/?(*.)(spec|test).*'],
       watch: './src',
-      silent: true,
-      formatter: typescriptFormatter
+      silent: true
     }),
     new NodemonPlugin(),
     new IgnoreNotFoundExportPlugin()
