@@ -4,6 +4,9 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import typescriptFormatter from 'react-dev-utils/typescriptFormatter';
 import NodemonPlugin from 'nodemon-webpack-plugin';
 
+process.env.BABEL_ENV = 'development';
+process.env.NODE_ENV = 'development';
+
 const webpackconfiguration: webpack.Configuration = {
   entry: path.resolve(__dirname, 'src'),
   output: {
@@ -16,7 +19,16 @@ const webpackconfiguration: webpack.Configuration = {
     extensions: ['.ts', '.tsx', '.js', '.json']
   },
   module: {
-    rules: [{ test: /\.(ts|js)x?$/, loader: 'babel-loader', exclude: /node_modules/ }]
+    rules: [
+      {
+        test: /\.(ts|js)x?$/,
+        loader: 'babel-loader',
+        options: {
+          presets: [['react-app', { flow: false, typescript: true }]]
+        },
+        exclude: /node_modules/
+      }
+    ]
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin({

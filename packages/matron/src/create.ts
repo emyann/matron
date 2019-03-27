@@ -9,6 +9,7 @@ import { snapshotCommand } from './snapshot/snapshot';
 import appRoot from 'app-root-path';
 import chalk from 'chalk';
 import { displayH1 } from './helpers';
+import { write } from 'clipboardy';
 
 interface CreateOptions {
   name: string;
@@ -68,7 +69,7 @@ async function create(options: CreateOptions) {
   const templateName = template ? template : 'hello-world';
   let templatePath = '';
   if (dryRun) {
-    console.log(displayH1('Dry Run Mode'));
+    console.log(displayH1` Dry Run Mode `);
   }
   const templateCacheDir = path.join(appRoot.path, 'cache/templates/src');
   if (isDev) {
@@ -128,6 +129,10 @@ async function create(options: CreateOptions) {
       skipInstall
     });
     // printFinalMessage(projectPath);
+    if (!dryRun && !skipInstall) {
+      const startCommand = `cd ${normalizedName} && npm start`;
+      await write(startCommand);
+    }
 
     // return 0;
   } catch (err) {
@@ -145,5 +150,5 @@ async function create(options: CreateOptions) {
 }
 
 function logInstallTemplate(templateName: string, providerName: string) {
-  console.log(displayH1('Install template'), chalk`{hex('#00b6ff') ${templateName} from ${providerName}}`);
+  console.log(displayH1`Install template`, chalk`{hex('#00b6ff') ${templateName} from ${providerName}}`);
 }

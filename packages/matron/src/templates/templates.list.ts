@@ -115,7 +115,7 @@ async function templatesCommand(options: TemplatesCommand) {
     case TemplatesSubCommand.list: {
       const templates = await githubClient().listTemplates();
       const table = new Table({
-        head: [displayH1('Name'), displayH1('Provider')],
+        head: [displayH1`Name`, displayH1`Provider`],
         colWidths: [50, 25]
       }) as HorizontalTable;
 

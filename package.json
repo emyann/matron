@@ -2,7 +2,6 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "prepare": "npm i packages/*",
     "start": "concurrently --raw \"lerna run start --scope @matron/schematics --stream\" \"lerna run watch --scope matron --stream\"",
     "build": "lerna exec --scope @matron/schematics --scope matron -- npm run build",
     "publish": "npm run build && lerna publish -y",
@@ -16,6 +15,7 @@
     "@matron/templates": "file:packages/templates",
     "@types/app-root-path": "^1.2.4",
     "@types/chance": "^1.0.1",
+    "@types/clipboardy": "^1.1.0",
     "@types/copy-webpack-plugin": "^4.4.2",
     "@types/cross-spawn": "^6.0.0",
     "@types/glob": "^7.1.1",
