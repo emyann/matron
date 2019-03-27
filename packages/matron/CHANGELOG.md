@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/emyann/matron/compare/v0.15.1...v0.16.0) (2019-03-27)
+
+
+### Bug Fixes
+
+* display help when no args. naive constraint on args number. ([0ca6dba](https://github.com/emyann/matron/commit/0ca6dba))
+* displayH1 usage ([191d030](https://github.com/emyann/matron/commit/191d030))
+* fix displayH1 usage ([c0c7915](https://github.com/emyann/matron/commit/c0c7915))
+* use strict and recommendCommands to better fallback ([8bdd788](https://github.com/emyann/matron/commit/8bdd788))
+
+
+### Features
+
+* add startCommand to clipboard when installation has completed ([9f61bbd](https://github.com/emyann/matron/commit/9f61bbd))
+
+
+
+
+
 ## [0.15.1](https://github.com/emyann/matron/compare/v0.15.0...v0.15.1) (2019-03-01)
 
 **Note:** Version bump only for package matron
