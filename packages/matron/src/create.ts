@@ -73,11 +73,8 @@ async function create(options: CreateOptions) {
   }
   const templateCacheDir = path.join(appRoot.path, 'cache/templates/src');
   if (isDev) {
-    templatePath = path.join(
-      appRoot.path,
-      'node_modules/@matron/schematics/node_modules/@matron',
-      getTemplateLocation(templateName)
-    );
+    templatePath = path.join(appRoot.path, 'node_modules/@matron', getTemplateLocation(templateName));
+    console.log('herreeeeeee ???', templatePath);
   } else {
     templatePath = path.join(appRoot.path, 'cache', getTemplateLocation(templateName));
     if (!p) {

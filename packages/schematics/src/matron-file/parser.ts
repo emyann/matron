@@ -28,8 +28,9 @@ function getCommand(line: string) {
 }
 
 function parseRun(line: string) {
-  const reg = new RegExp(/(?<cmd>^\w+)\s+['|"](?<args>.*)['|"]/);
+  const reg = new RegExp(/(?<cmd>^\w+)\s+(?<args>.*)/);
   const match = reg.exec(line);
+  console.log('match', match)
   if (match && match.groups) {
     return { cmd: match.groups.cmd as 'RUN', args: [match.groups.args] };
   } else {
