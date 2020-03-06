@@ -1,0 +1,28 @@
+jobs:
+  create-folder:
+    name: Create project folder
+    steps:
+      - RUN: npx mkdirp ${PROJECT_PATH}
+  init-project:
+    name: Initialize package.json
+    steps:
+      - WORKDIR: ${PROJECT_PATH}
+      - RUN: npm init -y
+  add-typescript:
+    name: Configuring TypeScript
+    steps:
+      - RUN: yarn add -D typescript ts-node-dev @types/node
+      - MERGE_JSON: ${TEMPLATE_PATH}/package.json ./package.json
+      - COPY: ${TEMPLATE_PATH}/src ./src
+  # add-babel:
+  #   name: Configuring Babel
+  #   steps:
+  #     - RUN: yarn add -D @babel/core @babel/preset-typescript @babel/plugin-proposal-class-properties @babel/preset-env
+  # add-webpack:
+  #   name: Configuring Webpack
+  #   steps:
+  #     - RUN: yarn add -D webpack @types/webpack webpack-cli babel-loader npm-run-all source-map-loader
+  # add-semantic-release:
+  #   name: Configuring semantic-release
+  #   steps:
+  #     - RUN: yarn add -D semantic-release
