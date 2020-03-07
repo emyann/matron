@@ -76,6 +76,7 @@ workflows:
       - publish:
           requires:
             - build
+            - test
           filters:
             branches:
               only:
