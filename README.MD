@@ -1,109 +1,138 @@
 # Matron
 
-> Kick off your next project without configuring a build system ✋🏼
-> **Just focus on the code 👈🏼**
+> A Domain Specific Language à-la Dockerfile with a CLI to scaffold your projects.
 
 [![npm](https://img.shields.io/npm/v/matron.svg?style=for-the-badge)](https://www.npmjs.com/package/matron) [![npm](https://img.shields.io/npm/dy/matron.svg?style=for-the-badge)](https://npm-stat.com/charts.html?package=matron) [![CircleCI (all branches)](https://img.shields.io/circleci/project/github/emyann/matron/master.svg?style=for-the-badge)](https://circleci.com/gh/emyann/matron)
 
 - [Matron](#matron)
-  - [Getting Started](#getting-started)
-  - [Features](#features)
+  - [Installation](#installation)
+  - [Quick start](#quick-start)
   - [Commands](#commands)
     - [`matron create`](#matron-create)
-    - [`matron snapshot`](#matron-snapshot)
-    - [`matron templates list`](#matron-templates-list)
+  - [Matron File](#matron-file)
+    - [Schema](#schema)
+    - [Environments variables](#environments-variables)
+      - [Dynamic variables](#dynamic-variables)
+      - [Dotenv variables](#dotenv-variables)
 
-## Getting Started
+## Installation
 
 **Using `npx`**
 
+If you don't prefer to install the CLI, you can use it through `npx` this way
+
 ```sh
-npx matron create ts-app
+npx matron --help
 ```
 
 **Install with `npm`**
 
+You can also install the CLI globally
+
 ```sh
 npm i -g matron
-matron create ts-app
+matron --help
 ```
 
-## Features
+## Quick start
 
-- **Dry run mode**: Commands are run against a virtual file system before they are applied. ([read more about schematics](https://blog.angular.io/schematics-an-introduction-dc1dfbc2a2b2))
-- **TypeScript First**: Matron is strongly oriented to produce enterprise-grade TypeScript projects but also support a broad range of JavaScript templates.
-- **Integrations**: Ability to start a project out of popular frameworks templates like [`create-react-app`](https://github.com/facebook/create-react-app), [`now`](https://github.com/zeit/now-examples)
+The minimal setup required to use matron and scaffold a new project is a **`matron.yml`** file.
+
+Let's start with the example below:
+
+📄 **`matron.yml`**
+
+```yml
+jobs:
+  create-folder:
+    name: Create project folder
+    steps:
+      - RUN: npx mkdirp ${PROJECT_PATH}
+  init-project:
+    name: Initialize package.json
+    steps:
+      - WORKDIR: ${PROJECT_PATH}
+      - RUN: npm init -y
+  add-typescript:
+    name: Add TypeScript
+    steps:
+      - RUN: yarn add -D typescript
+```
+
+▶️ **matron command**
+
+```sh
+matron create --matron-file=./matron.yml --project my-project
+```
+
+Let's break down each steps:
+
+1. **Create project folder**
+
+   1. `RUN: npx mkdirp ${PROJECT_PATH}`: With the `RUN` command you can execute any command that is possible to execute on your shell.
+   2. Here we are using [`mkdirp`](https://www.npmjs.com/package/mkdirp) to create a folder at the path `my-project`.
+   3. `${PROJECT_PATH}` is a default environment variable provided when you specify the option `--project`.
+
+2. **Initialize package.json**
+   1. `WORKDIR: ${PROJECT_PATH}`: With the `WORKDIR` command, all the subsequent `RUN` commands will be executed in the specified path, in this case `${PROJECT_PATH}` equals `my-project`.
+   2. `RUN: npm init -y`: This will create a minimal `package.json` file.
+3. **Add TypeScript**
+   1. `RUN: yarn add -D typescript`: Add TypeScript as dev dependencies.
+
+When executed, this will result in the following file tree:
+
+```sh
+my-project
+├── node_modules
+├── package.json
+└── yarn.lock
+```
+
+💡**You can learn more about the available commands [here](#commands).**
+
+💡**You can learn more about matron file schema [here](#matron-file).**
+
+
 
 ## Commands
 
 ### `matron create`
 
-> Create a project
-
-**Usage**
+> Create a project using a matron file
 
 ```sh
-matron create <name> [--template] [--dry-run] [--skip-install]
+matron create [--matron-file] [--project] [--template] [--env-folder]
 ```
-
-**Arguments**
-
-- **`name`**: Name or path of the project to create.
 
 **Options**
 
-- **`--template`, `-t`**: Create a project out of a specific template.
-- **`--skip-install`, `-s`**: Skip the installation of npm dependencies.
-- **`--dry-run`, `-d`**: Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system.
+Name              | Alias | Description
+------------------|-------|----------------------------------------------
+**--matron-file** | -f    | Matron file path.
+**--project**     | -p    | Name or Path of the project to create.
+**--template**    | -t    | Folder containing at least a matron.yml file.
+**--env-folder**  |       | .env files folder.
+**--help**        |       | Show help
+
+
 
 **Examples**
 
 ```sh
-# creates TypeScript project configured with Parcel
-matron create ts-app --template typescript-parcel
+# Creates a project at ./my-project using ./matron.yml file
+matron create --matron-file=./matron.yml --project my-project
 
-# creates the files but skip npm install
-matron create path/to/my-app --skip-install
-
-# only displays the files that will be created
-matron create my-app -t typescript-webpack --dry-run
+# Creates a project at path/to/ts-project using a template folder containing a matron.yml file and/or a .env file
+matron create --template ./matron-templates/typescript --project path/to/ts-project
 ```
 
-### `matron snapshot`
+## Matron File
 
-> Snapshot a state of your file system to create a template.
+### Schema
 
-**Usage**
+### Environments variables
 
-```sh
-matron snapshot [path] [destination] [--ignore] [--dry-run]
-```
+#### Dynamic variables
 
-**Arguments**
+#### Dotenv variables
 
-- **`path`**: Directory to snapshot.
-- **`destination`**: Destination directory where to store the snapshot.
-
-**Options**
-
-- **`--ignore`, `-i`**: Specify glob files to ignore..
-- **`--dry-run`, `-d`**: Run the command in Dry Run mode. It will only simulate the command with no modifications applied on the file system.
-
-**Examples**
-
-```sh
-matron snapshot ./ /my-boilerplate -i "dist" "lib/**.spec.ts"
-
-# snaphots the files in the current folder to a new folder friendly named
-matron snapshot --dry-run
-```
-
-### `matron templates list`
-
-> List the available templates
-
-**Usage**
-
-```sh
-matron templates list
-```
