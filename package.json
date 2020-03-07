@@ -5,6 +5,9 @@
   "bin": {
     "matron": "./dist/matron.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "tsnd --respawn ./src/cli/index.ts",
     "build": "run-p build:js build:types",
