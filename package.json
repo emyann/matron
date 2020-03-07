@@ -1,5 +1,5 @@
 {
-  "name": "matron-parser",
+  "name": "matron",
   "version": "1.0.0",
   "main": "./dist/matron.js",
   "bin": {
