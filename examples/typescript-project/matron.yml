@@ -1,0 +1,23 @@
+jobs:
+  create-folder:
+    name: Create project folder
+    steps:
+      - RUN: npx mkdirp ${PROJECT_PATH}
+  init-project:
+    name: Initialize package.json
+    steps:
+      - WORKDIR: ${PROJECT_PATH}
+      - RUN: npm init -y
+  add-typescript:
+    name: Configuring TypeScript
+    steps:
+      - RUN: yarn add -D typescript ts-node-dev @types/node
+      - COPY: ./templates/tsconfig.json ./tsconfig.json
+  update-package.json:
+    name: Updating package.json
+    steps:
+      - MERGE_JSON: ./templates/package.json ./package.json
+  copy-src:
+    name: Copy src files
+    steps:
+      - COPY: ./templates/src ./src
