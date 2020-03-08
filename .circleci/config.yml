@@ -6,91 +6,80 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:10.6
+      - image: circleci/node:10
     working_directory: ~/repo
     steps:
       - checkout
-      - run:
-          name: Install Dependencies
-          command: npm ci
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Build
-          command: npm run build
-  unit-test:
+          command: yarn build
+      - save_cache:
+          paths:
+            - dist
+          key: v1-dist-{{ .Environment.CIRCLE_SHA1 }}
+  test:
     docker:
-      - image: circleci/node:10.6
+      - image: circleci/node:10
     working_directory: ~/repo
     steps:
       - checkout
+      # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
       - run:
-          name: Unit Tests
-          command: npm t -- --coverage
-  e2e-test:
-    docker:
-      - image: circleci/node:10.6
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-      - run:
-          name: Build
-          command: npm run build
-      - run:
-          name: E2E Tests
-          command: npm run e2e
+          name: Test
+          command: yarn test
+
   publish:
     docker:
-      - image: circleci/node:10.6
+      - image: circleci/node:10
     working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-{{ checksum "yarn.lock" }}
             - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          keys:
+            - v1-dist-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-          name: NPMRC
-          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-      - run:
-          name: Set Git user info
-          command: |
-            git config --global -l
-            git config --global user.email renaudin.yann@gmail.com
-            git config --global user.name Yann Renaudin
-      - run:
-          name: Publish to NPM
-          command: npm run publish
+          name: Publish Package
+          command: cd dist && yarn run semantic-release
 
 workflows:
   version: 2
-  build-test-deploy:
+  build:
     jobs:
       - build
-      - unit-test:
-          requires:
-            - build
-      - e2e-test:
-          requires:
-            - build
+      - test
       - publish:
           requires:
-            - unit-test
-            - e2e-test
+            - build
+            - test
           filters:
             branches:
               only:
+                - next
                 - master
+                - beta

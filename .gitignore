@@ -1,8 +1,4 @@
 node_modules
-.DS_Store
-**.log
-dist/
-**/temp/**/*
-cache
-packages/matron/temp_cache
 coverage
+output
+dist
