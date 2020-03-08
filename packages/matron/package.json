@@ -32,7 +32,7 @@
     "@angular-devkit/schematics": "^7.3.1",
     "@matron/schematics": "file:../schematics",
     "@octokit/rest": "^16.9.0",
-    "app-root-path": "^2.1.0",
+    "app-root-path": "^2.2.1",
     "chalk": "^2.4.1",
     "cli-table3": "^0.5.1",
     "clipboardy": "^1.2.3",
