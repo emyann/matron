@@ -1,12 +1,13 @@
 import { interpret, createMachine, assign, actions } from 'xstate';
 import { createAction } from '@reduxjs/toolkit';
-import { Command, CommandType, parser, loadFile, evaluate, toSpawnCommand } from './parser/parser';
+import { parser, loadFile, evaluate, toSpawnCommand } from './parser/parser';
 import spawn from 'cross-spawn';
 import uuidv4 from 'uuid/v4';
 import merge from 'deepmerge';
 import path from 'path';
 import fs from 'fs';
 import fse from 'fs-extra';
+import { Command, CommandType } from './parser/parser.types';
 
 const { log } = actions;
 

@@ -1,4 +1,5 @@
-import { parser, evaluate, Command, toSpawnCommand } from './parser';
+import { loadMatronDocument, parser, lint, evaluate, toSpawnCommand } from './parser';
+import { Command } from './parser.types';
 
 describe('parser', () => {
   it('should parse a YAML file to a command', () => {
@@ -19,6 +20,19 @@ describe('parser', () => {
     expect(jobs).toBeDefined();
     expect(jobs.length).toEqual(1);
     expect(jobs[0]).toEqual({ key, name, steps: [{ cmd, args }] });
+  });
+
+  it('should throw when yaml linter fails', () => {
+    const yaml = `
+      jobs:
+        a-job:
+          steps:
+            - UNKNOWN_COMMAND: 12
+    `;
+
+    const doc = loadMatronDocument(yaml);
+    const fn = () => lint(doc);
+    expect(fn).toThrow();
   });
 });
 

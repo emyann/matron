@@ -1,0 +1,60 @@
+{
+  "$ref": "#/definitions/MatronDocument",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "MatronDocument": {
+      "additionalProperties": false,
+      "properties": {
+        "jobs": {
+          "$ref": "#/definitions/MatronDocumentJobs"
+        }
+      },
+      "required": [
+        "jobs"
+      ],
+      "type": "object"
+    },
+    "MatronDocumentJob": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "steps": {
+          "items": {
+            "$ref": "#/definitions/MatronDocumentJobStep"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "steps"
+      ],
+      "type": "object"
+    },
+    "MatronDocumentJobStep": {
+      "additionalProperties": false,
+      "properties": {
+        "COPY": {
+          "type": "string"
+        },
+        "MERGE_JSON": {
+          "type": "string"
+        },
+        "RUN": {
+          "type": "string"
+        },
+        "WORKDIR": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MatronDocumentJobs": {
+      "additionalProperties": {
+        "$ref": "#/definitions/MatronDocumentJob"
+      },
+      "type": "object"
+    }
+  }
+}
