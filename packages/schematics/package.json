@@ -24,7 +24,7 @@
   "dependencies": {
     "@angular-devkit/core": "^7.3.1",
     "@angular-devkit/schematics": "^7.3.1",
-    "chance": "^1.0.18",
+    "chance": "^1.1.4",
     "cross-spawn": "^6.0.5",
     "globby": "^9.0.0",
     "minimatch": "^3.0.4",
