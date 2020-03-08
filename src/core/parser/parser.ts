@@ -1,54 +1,67 @@
 import yaml from 'js-yaml';
 import { readFileSync } from 'fs';
 import { morphism, createSchema } from 'morphism';
-
-export interface Command {
-  cmd: keyof typeof CommandType;
-  args: string[];
-}
-
-export enum CommandType {
-  COPY = 'COPY',
-  RUN = 'RUN',
-  WORKDIR = 'WORKDIR',
-  MERGE_JSON = 'MERGE_JSON'
-}
+import Ajv, { ValidationError } from 'ajv';
+import fse from 'fs-extra';
+import path from 'path';
+import jsonSchema from './schema.json';
+import { Command, CommandType, Job, MatronDocumentJobStep, MatronDocument } from './parser.types.js';
 
 export function loadFile(path: string) {
   return Promise.resolve(readFileSync(path, 'utf8'));
 }
-
-export interface Job {
-  key: string;
-  name?: string;
-  steps: Command[];
-}
-
-type YamlDocStep = { [key: string]: string };
-interface YamlDoc {
-  jobs: { [key: string]: { name?: string; steps: YamlDocStep[] } };
-}
-
 const toCommand = morphism(
-  createSchema<Command, YamlDocStep>({
+  createSchema<Command, MatronDocumentJobStep>({
     cmd: step => {
       return Object.keys(step)[0] as CommandType;
     },
-    args: step => Object.values(step)[0].split(' ')
+    args: step => {
+      const argsStr = Object.values(step)[0];
+      if (argsStr) {
+        const args = argsStr.split(' ');
+        return args;
+      } else {
+        return [];
+      }
+    }
   })
 );
-export function parser(content: string): Job[] {
+
+export function loadMatronDocument(content: string): MatronDocument {
   try {
-    const doc: YamlDoc = yaml.safeLoad(content);
-    return Object.entries(doc.jobs).map(([key, job]) => {
-      return {
-        key,
-        name: job.name,
-        steps: toCommand(job.steps)
-      };
-    });
+    return yaml.safeLoad(content);
   } catch (error) {
     throw error;
+  }
+}
+export function parser(content: string): Job[] {
+  const doc = loadMatronDocument(content);
+  lint(doc);
+  return Object.entries(doc.jobs).map(([key, job]) => {
+    return {
+      key,
+      name: job.name,
+      steps: toCommand(job.steps)
+    };
+  });
+}
+
+export function lint(doc: MatronDocument) {
+  const ajv = new Ajv();
+  const validate = ajv.compile(jsonSchema);
+  const isValid = validate(doc);
+  if (!isValid) {
+    throw new LinterError(validate.errors!);
+  }
+}
+
+class LinterError extends Error {
+  constructor(errors: Ajv.ErrorObject[]) {
+    const message = `
+Unable to validate the Matron file.
+  Errors: ${JSON.stringify(errors, null, 2)}
+    `;
+    super(message);
   }
 }
 

@@ -10,12 +10,13 @@
   ],
   "scripts": {
     "start": "tsnd --respawn ./src/cli/index.ts",
-    "build": "run-p build:js build:types",
+    "build": "yarn generate-json-schema && run-p build:js build:types",
     "build:js": "TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --mode=production",
     "build:types": "tsc -p tsconfig.prod.json --emitDeclarationOnly",
     "local": "yarn build && npm link && rm -rf package-lock.json",
     "test": "jest",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "generate-json-schema": "ts-json-schema-generator -p ./src/core/parser/parser.types.ts -t MatronDocument -o ./src/core/parser/schema.json"
   },
   "release": {
     "branches": [
@@ -58,6 +59,7 @@
     "npm-run-all": "^4.1.5",
     "semantic-release": "^17.0.4",
     "source-map-loader": "^0.2.4",
+    "ts-json-schema-generator": "^0.65.0",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.5",
     "webpack": "^4.41.6",
@@ -66,6 +68,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.2.4",
+    "ajv": "^6.12.0",
     "chalk": "^3.0.0",
     "cross-spawn": "^7.0.1",
     "deepmerge": "^4.2.2",
