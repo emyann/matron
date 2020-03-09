@@ -5,7 +5,7 @@ import Ajv, { ValidationError } from 'ajv';
 import fse from 'fs-extra';
 import path from 'path';
 import jsonSchema from './schema.json';
-import { Command, CommandType, Job, MatronDocumentJobStep, MatronDocument } from './parser.types.js';
+import { Command, CommandType, Job, MatronDocumentJobStep, MatronDocument } from './parser.types';
 
 export function loadFile(path: string) {
   return Promise.resolve(readFileSync(path, 'utf8'));
