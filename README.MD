@@ -60,7 +60,7 @@ jobs:
       - RUN: yarn add -D typescript
 ```
 
-▶️ **matron command**
+📺 **matron command**
 
 ```sh
 matron create --matron-file=./matron.yml --project my-project
@@ -113,6 +113,20 @@ matron create [--matron-file] [--project] [--template] [--env-folder]
 | **--env-folder**  |       | .env files folder.                                               |
 | **--help**        |       | Show help                                                        |
 
+<details><summary><strong>Examples</strong></summary>
+<p>
+
+```sh
+# Creates a project at ./my-project using ./matron.yml file
+matron create --matron-file=./matron.yml --project my-project
+
+# Creates a project at path/to/ts-project using a template folder containing a matron.yml file and/or a .env file
+matron create --template ./matron-templates/typescript --project path/to/ts-project
+```
+
+</p>
+</details>
+
 ### `matron lint`
 
 > **Lint your matron file**
@@ -128,15 +142,19 @@ matron lint [--matron-file] [--template]
 | **--matron-file** | -f    | Matron file path.                                                |
 | **--template**    | -t    | Relative path of a folder containing at least a matron.yml file. |
 
-**Examples**
+<details><summary><strong>Examples</strong></summary>
+<p>
 
 ```sh
-# Creates a project at ./my-project using ./matron.yml file
-matron create --matron-file=./matron.yml --project my-project
+# Lint a matron file by providing its relative path
+matron lint --matron-file=./matron.yml
 
-# Creates a project at path/to/ts-project using a template folder containing a matron.yml file and/or a .env file
-matron create --template ./matron-templates/typescript --project path/to/ts-project
+# Lint a matron file by providing a folder relative path
+matron lint --template=path/to/folder/template
 ```
+
+</p>
+</details>
 
 ## Matron File
 
