@@ -33,7 +33,7 @@ Usage
       },
       [CommandOptions.Template]: {
         alias: 't',
-        describe: 'Folder containing at least a matron.yml file.',
+        describe: 'Relative path of a folder containing at least a matron.yml file.',
         type: 'string'
       },
       [CommandOptions.MatronFile]: {

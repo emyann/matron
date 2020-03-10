@@ -9,6 +9,7 @@
   - [Quick start](#quick-start)
   - [Commands](#commands)
     - [`matron create`](#matron-create)
+    - [`matron lint`](#matron-lint)
   - [Matron File](#matron-file)
     - [Schema](#schema)
     - [Environments variables](#environments-variables)
@@ -92,13 +93,11 @@ my-project
 
 💡**You can learn more about matron file schema [here](#matron-file).**
 
-
-
 ## Commands
 
 ### `matron create`
 
-> Create a project using a matron file
+> **Create a project using a matron file**
 
 ```sh
 matron create [--matron-file] [--project] [--template] [--env-folder]
@@ -106,15 +105,28 @@ matron create [--matron-file] [--project] [--template] [--env-folder]
 
 **Options**
 
-Name              | Alias | Description
-------------------|-------|----------------------------------------------
-**--matron-file** | -f    | Matron file path.
-**--project**     | -p    | Name or Path of the project to create.
-**--template**    | -t    | Folder containing at least a matron.yml file.
-**--env-folder**  |       | .env files folder.
-**--help**        |       | Show help
+| Name              | Alias | Description                                                      |
+| ----------------- | ----- | ---------------------------------------------------------------- |
+| **--matron-file** | -f    | Matron file path.                                                |
+| **--project**     | -p    | Name or Path of the project to create.                           |
+| **--template**    | -t    | Relative path of a folder containing at least a matron.yml file. |
+| **--env-folder**  |       | .env files folder.                                               |
+| **--help**        |       | Show help                                                        |
 
+### `matron lint`
 
+> **Lint your matron file**
+
+```sh
+matron lint [--matron-file] [--template]
+```
+
+**Options**
+
+| Name              | Alias | Description                                                      |
+| ----------------- | ----- | ---------------------------------------------------------------- |
+| **--matron-file** | -f    | Matron file path.                                                |
+| **--template**    | -t    | Relative path of a folder containing at least a matron.yml file. |
 
 **Examples**
 
@@ -135,4 +147,3 @@ matron create --template ./matron-templates/typescript --project path/to/ts-proj
 #### Dynamic variables
 
 #### Dotenv variables
-
