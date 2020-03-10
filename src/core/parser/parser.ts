@@ -6,6 +6,7 @@ import fse from 'fs-extra';
 import path from 'path';
 import jsonSchema from './schema.json';
 import { Command, CommandType, Job, MatronDocumentJobStep, MatronDocument } from './parser.types';
+import { fmtError } from '../../cli/utilities/log';
 
 export function loadFile(path: string) {
   return Promise.resolve(readFileSync(path, 'utf8'));
@@ -55,13 +56,15 @@ export function lint(doc: MatronDocument) {
   }
 }
 
-class LinterError extends Error {
-  constructor(errors: Ajv.ErrorObject[]) {
+export class LinterError extends Error {
+  errors: Ajv.ErrorObject[];
+  constructor(_errors: Ajv.ErrorObject[]) {
     const message = `
 Unable to validate the Matron file.
-  Errors: ${JSON.stringify(errors, null, 2)}
+  Errors: ${JSON.stringify(_errors, null, 2)}
     `;
-    super(message);
+    super(fmtError`${message}`);
+    this.errors = _errors;
   }
 }
 

@@ -1067,6 +1067,16 @@
     "@octokit/plugin-request-log" "^1.0.0"
     "@octokit/plugin-rest-endpoint-methods" "^3.0.0"
 
+"@octokit/rest@^17.0.1":
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-17.0.1.tgz#0d8a179996ce71fe18e519b904ee1f05ec3067a6"
+  integrity sha512-5ANlzTxKxkYjh1xLRAJFATv6Lt73WgmUHGZJCPDmKjt/EN4sSaNbdELKnacuUPgkA2COkWtR8eUViWY9SMN1Bg==
+  dependencies:
+    "@octokit/core" "^2.4.0"
+    "@octokit/plugin-paginate-rest" "^2.0.0"
+    "@octokit/plugin-request-log" "^1.0.0"
+    "@octokit/plugin-rest-endpoint-methods" "^3.0.0"
+
 "@octokit/types@^2.0.0", "@octokit/types@^2.0.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@octokit/types/-/types-2.3.1.tgz#40cd61c125a6161cfb3bfabc75805ac7a54213b4"
@@ -8749,7 +8759,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.7.5, typescript@~3.8.3:
+typescript@^3.8.3, typescript@~3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
   integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==

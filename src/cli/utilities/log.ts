@@ -8,10 +8,29 @@ enum Color {
 }
 
 export function fmtError(message: TemplateStringsArray, ...values: any) {
-  const finalMessage = message.reduce((acc, cur, idx) => {
+  const finalMessage = templateStringReducer(message, values);
+  return chalk.hex(Color.Red).bold(finalMessage);
+}
+
+export function fmtSuccess(message: TemplateStringsArray, ...values: any) {
+  const finalMessage = templateStringReducer(message, values);
+  return chalk.hex(Color.Green).bold(finalMessage);
+}
+
+export function fmtLog(message: TemplateStringsArray, ...values: any) {
+  const finalMessage = templateStringReducer(message, values);
+  return chalk.hex(Color.Blue).bold(finalMessage);
+}
+
+export function fmtWarn(message: TemplateStringsArray, ...values: any) {
+  const finalMessage = templateStringReducer(message, values);
+  return chalk.hex(Color.Yellow).bold(finalMessage);
+}
+
+function templateStringReducer(message: TemplateStringsArray, ...values: any) {
+  return message.reduce((acc, cur, idx) => {
     acc += cur;
     acc += values[idx] !== undefined ? values[idx] : '';
     return acc;
   }, '');
-  return chalk.hex(Color.Red).bold(finalMessage);
 }
