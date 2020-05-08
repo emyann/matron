@@ -78,7 +78,7 @@
     "js-yaml": "^3.13.1",
     "morphism": "^1.12.3",
     "uuid": "^3.4.0",
-    "xstate": "^4.7.8",
+    "xstate": "^4.9.0",
     "yargs": "^15.3.0"
   },
   "description": ""
