@@ -75,7 +75,7 @@
     "deepmerge": "^4.2.2",
     "dotenv-flow": "^3.1.0",
     "fs-extra": "^8.1.0",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^3.14.0",
     "morphism": "^1.12.3",
     "uuid": "^3.4.0",
     "xstate": "^4.9.0",
