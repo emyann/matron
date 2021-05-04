@@ -1,6 +1,6 @@
 import yargs, { CommandModule } from 'yargs';
 import chalk from 'chalk';
-import { create } from './commands';
+import { create, lint } from './commands';
 const usage = `
 Usage
   ${chalk.green('matron')} create --matron-file=./matron.yml
@@ -13,6 +13,7 @@ yargs
   .wrap(yargs.terminalWidth())
   .showHelpOnFail(true)
   .command(create)
+  .command(lint)
   .demandCommand()
   .recommendCommands()
   .strict().argv;

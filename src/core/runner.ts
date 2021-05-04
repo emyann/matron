@@ -3,6 +3,7 @@ import dotenv from 'dotenv-flow';
 import path from 'path';
 import { ArgsConflictError, RequiredArgsError, MatronFileMissingError, GenericError } from '../cli/utilities/errors';
 import fse from 'fs-extra';
+import { getAbsolutePath, getMatronFileAbsolutePathFromTemplateFolder } from '../common/helpers';
 
 interface RunnerOptions {
   matronFileRelativePath?: string;
@@ -16,12 +17,7 @@ export function run(options: RunnerOptions) {
   if (validateRequiredArgs({ matronFileRelativePath, templateFolderRelativePath })) {
     if (templateFolderRelativePath) {
       const templateFolderAbsolutePath = getAbsolutePath(templateFolderRelativePath);
-
-      if (!fse.existsSync(path.join(templateFolderAbsolutePath, './matron.yml'))) {
-        throw new MatronFileMissingError(templateFolderAbsolutePath);
-      } else {
-        matronFileAbsolutePath = path.join(templateFolderAbsolutePath, './matron.yml');
-      }
+      matronFileAbsolutePath = getMatronFileAbsolutePathFromTemplateFolder(templateFolderAbsolutePath);
       setupEnvironmentVariables(templateFolderAbsolutePath);
     }
 
@@ -70,10 +66,6 @@ function validateRequiredArgs(args: RequiredArgs) {
   } else {
     return true;
   }
-}
-
-function getAbsolutePath(relativePath: string) {
-  return path.join(process.cwd(), relativePath);
 }
 
 function setupEnvironmentVariables(dotEnvFolderAbsolutePath: string) {
