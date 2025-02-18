@@ -67,7 +67,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
-    "@octokit/rest": "^17.1.0",
+    "@octokit/rest": "^21.1.1",
     "@reduxjs/toolkit": "^1.5.0",
     "ajv": "^6.12.4",
     "chalk": "^3.0.0",
